@@ -21,6 +21,12 @@ jobs:
           npm run build --if-present
           ls -l
           pwd
+          cd ..
+          ls -l
+          pwd
+          cd ..
+          ls -l
+          pwd
       - name: Upload build
         uses: actions/upload-artifact@v3
         with:
