@@ -35,11 +35,11 @@ jobs:
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with: 
-          server: ${{ secrets.server }}
-          username: ${{ secrets.username }}
+          server: arturscibor.pl
+          username: artur
           password: ${{ secrets.password }}
-          server-dir: ${{ secrets.prod_dir }}
-          port: ${{ secrets.port }}
+          server-dir: /var/www/ProjektInzynierski/projektinzynierski.strona.arturscibor.pl/
+          port: 22
           timeout: 180000
 
             
