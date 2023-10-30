@@ -33,16 +33,15 @@ jobs:
         with:
           name: build
       - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with: 
           server: arturscibor.pl
           username: artur
           password: ${{ secrets.password }}
-          server-dir: /var/www/ProjektInzynierski/projektinzynierski.strona.arturscibor.pl/
+          local_path: ./*
+          remote_path: /var/www/ProjektInzynierski/projektinzynierski.strona.arturscibor.pl/
           port: 22
-          timeout: 180000
-          log-level: verbose
-          protocol: sftp
+          sftp_only: true
 
             
      
