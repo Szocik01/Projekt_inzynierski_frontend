@@ -40,6 +40,7 @@ jobs:
           password: ${{ secrets.password }}
           server-dir: ${{ secrets.prod_dir }}
           port: ${{ secrets.port }}
+          timeout: 180000
 
             
      
