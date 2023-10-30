@@ -43,6 +43,8 @@ jobs:
           timeout: 180000
           log-level: verbose
           protocol: ftp
+          security: loose
+          dry-run: true
 
             
      
