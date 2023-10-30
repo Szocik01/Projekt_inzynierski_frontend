@@ -38,11 +38,11 @@ jobs:
           server: arturscibor.pl
           username: artur
           password: ${{ secrets.password }}
-          # server-dir: /var/www/ProjektInzynierski/projektinzynierski.strona.arturscibor.pl/
+          server-dir: /var/www/ProjektInzynierski/projektinzynierski.strona.arturscibor.pl/
           port: 21
           timeout: 180000
           log-level: verbose
-          # protocol: ftp
+          protocol: ftp
 
             
      
