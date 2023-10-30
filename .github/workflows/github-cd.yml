@@ -32,9 +32,14 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build
-      - name: test directory
-        run: |
-          ls -l
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with: 
+          server: ${{ secrets.server }}
+          username: ${{ secrets.username }}
+          password: ${{ secrets.password }}
+          server-dir: ${{ secrets.prod_dir }}
+          port: ${{ secrets.port }}
 
             
      
