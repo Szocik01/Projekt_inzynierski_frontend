@@ -41,6 +41,7 @@ jobs:
           server-dir: /var/www/ProjektInzynierski/projektinzynierski.strona.arturscibor.pl/
           port: 22
           timeout: 180000
+          log-level: verbose
 
             
      
