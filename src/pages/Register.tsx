@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
 import SingleColumn from "../components/LayoutComponents/SingleColumn";
-import { css } from "@emotion/react";
 import AuthFormInputs from "../components/AuthComponents/AuthFormInputs";
 import { Button } from "@mui/material";
 
