@@ -8,11 +8,12 @@ import { API_CALL_URL_BASE } from "../utils/Constants";
 import { useDispatch } from "react-redux";
 import { authSliceActions } from "../storage/authSlice";
 import ContentLoading from "../components/UtilityComponents/ContentLoading";
-import {css} from "@emotion/react";
+import { css } from "@emotion/react";
+import setSingleCookie from "../utils/SetSingleCookie";
 
-const loginPanelStyles=css({
-    position: "relative"
-})
+const loginPanelStyles = css({
+  position: "relative",
+});
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -53,14 +54,26 @@ const Login = () => {
       throw new Error("Wystąpił wewnętrzny błąd serwera.");
     }
     if (response.status >= 400 && response.status <= 499) {
-      throw new Error("Niepoprawny login lub hasło");
+      throw new Error("Podano niepoprawne dane");
     }
     return response.json().then((data) => {
-        dispatch(authSliceActions.addUserData({
-            token: data.token.access_token,
-            userId: data.user.id,
-            expiration: data.token.token_expire
-        }));
+      setSingleCookie(
+        "token",
+        data.token.access_token,
+        loginData.rememberMe ? new Date(data.token.token_expire) : undefined
+      );
+      setSingleCookie(
+        "userId",
+        data.user.id,
+        loginData.rememberMe ? new Date(data.token.token_expire) : undefined
+      );
+
+      dispatch(
+        authSliceActions.addUserData({
+          token: data.token.access_token,
+          userId: data.user.id,
+        })
+      );
     });
   };
 
@@ -70,6 +83,11 @@ const Login = () => {
 
   const loginHandler = (event: FormEvent) => {
     event.preventDefault();
+    setHttpError("");
+    if (!!emailError || !!passwordError) {
+      return;
+    }
+
     const body = {
       email: loginData.email,
       password: loginData.password,
@@ -79,6 +97,7 @@ const Login = () => {
     const headers = {
       "Content-Type": "application/json",
     };
+
     sendLoginData(handleResponse, handleError, {
       method: "POST",
       headers: headers,
@@ -115,7 +134,7 @@ const Login = () => {
               });
             }}
           />
-          <div>{ httpError ? httpError : ""}</div>
+          <div>{httpError ? httpError : ""}</div>
           <Button
             variant="contained"
             disabled={!!emailError || !!passwordError}
