@@ -3,6 +3,8 @@ import { useState } from "react";
 import SingleColumn from "../components/LayoutComponents/SingleColumn";
 import AuthFormInputs from "../components/AuthComponents/AuthFormInputs";
 import { Button } from "@mui/material";
+// import useHttp from "../hooks/useHttp";
+// import { API_CALL_URL_BASE } from "../utils/Constants";
 
 const Register = () => {
   const [registerData, setRegisterData] = useState({
@@ -10,8 +12,11 @@ const Register = () => {
     password: "",
     confirmPassword: "",
     userName: "",
-    rememberMe: false,
   });
+
+  // const [sendRegisterData, isLoading] = useHttp(
+  //   `${API_CALL_URL_BASE}/api/routers/http/controllers/auth/register`
+  // );
 
   const validateEmail = (email: string) => {
     if (email.trim().length === 0) {
@@ -79,16 +84,19 @@ const Register = () => {
                 return {
                   ...prevValue,
                   ...{
-                    [targetElementName]:
-                      targetElementName !== "rememberMe"
-                        ? event.target.value
-                        : event.target.checked,
+                    [targetElementName]: event.target.value,
                   },
                 };
               });
             }}
           />
-          <Button variant="contained">Zarejestruj</Button>
+          <Button
+            variant="contained"
+            disabled={!!emailError || !!passwordError || !!confirmPasswordError || !!userNameError}
+            type="submit"
+          >
+            Zarejestruj
+          </Button>
         </form>
         <div></div>
       </div>

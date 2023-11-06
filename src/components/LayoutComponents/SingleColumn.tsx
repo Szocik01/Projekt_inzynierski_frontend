@@ -35,7 +35,6 @@ const singleColumnCss = css({
 
 })
 
-console.log(mediaUp("sm"))
 const SingleColumn: FC<PropsWithChildren<SingleColumnProps>> = (props) => {
     
   const {children, customCss} = props;
