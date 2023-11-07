@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import "./App.css";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +6,7 @@ import { ReduxAppState } from "./storage/redux";
 import PageNotFound from "./pages/PageNotFound";
 import { AuthSliceState, authSliceActions } from "./storage/authSlice";
 import { useLayoutEffect } from "react";
+import { Global } from "@emotion/react";
 
 const App = () => {
   const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
@@ -36,6 +36,24 @@ const App = () => {
   }, [dispatch]);
 
   return (
+    <>
+    <Global styles={{
+      "*":{
+        boxSizing: "border-box",
+        margin: 0,
+        padding: 0,
+
+      },
+      "body":{
+        overflowX: "hidden",
+        fontFamily: "'Secular One', sans-serif",
+        background: "url('/images/backgrounds/page-background.svg'), linear-gradient(180deg, #3EF83E 40.44%, #242424 133.14%);",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+        minHeight: "100dvh"        
+      }
+    }}/>
     <Routes>
       {token && userId ? (
         <Route path="/register" element={<Navigate to="/" replace={true} />} />
@@ -49,6 +67,7 @@ const App = () => {
       )}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
+    </>
   );
 };
 
