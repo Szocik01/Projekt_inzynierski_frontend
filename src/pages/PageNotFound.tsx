@@ -4,7 +4,7 @@ import { mediaUp } from "../utils/mediaQueries";
 
 const PageNotFoundContainerStyles = css({
   width: "100%",
-  height: "50vh",
+  height: "80dvh",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -19,7 +19,7 @@ const numberStyles = css({
   transform: "translate(-50%, -50%)",
   fontSize: "10rem",
   fontWeight: "bold",
-  color: "rgb(227, 227, 227)",
+  color: "white",
   [mediaUp("md")]:{
     fontSize: "15rem"
   }
