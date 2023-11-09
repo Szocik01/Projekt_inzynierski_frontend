@@ -64,30 +64,31 @@ const Login = () => {
   };
 
   const handleResponse = (response: Response) => {
-    if (response.status >= 500) {
-      throw new Error("Wystąpił wewnętrzny błąd serwera.");
-    }
-    if (response.status >= 400 && response.status <= 499) {
-      throw new Error("Podano niepoprawne dane");
-    }
+    // if (response.status >= 500) {
+    //   throw new Error("Wystąpił wewnętrzny błąd serwera.");
+    // }
+    // if (response.status >= 400 && response.status <= 499) {
+    //   throw new Error("Podano niepoprawne dane");
+    // }
     return response.json().then((data) => {
-      setSingleCookie(
-        "token",
-        data.token.access_token,
-        loginData.rememberMe ? new Date(data.token.token_expire) : undefined
-      );
-      setSingleCookie(
-        "userId",
-        data.user.id,
-        loginData.rememberMe ? new Date(data.token.token_expire) : undefined
-      );
+      setHttpError(`${data.message}, ${data.status}, ${data.server_message}`)
+      // setSingleCookie(
+      //   "token",
+      //   data.token.access_token,
+      //   loginData.rememberMe ? new Date(data.token.token_expire) : undefined
+      // );
+      // setSingleCookie(
+      //   "userId",
+      //   data.user.id,
+      //   loginData.rememberMe ? new Date(data.token.token_expire) : undefined
+      // );
 
-      dispatch(
-        authSliceActions.addUserData({
-          token: data.token.access_token,
-          userId: data.user.id,
-        })
-      );
+      // dispatch(
+      //   authSliceActions.addUserData({
+      //     token: data.token.access_token,
+      //     userId: data.user.id,
+      //   })
+      // );
     });
   };
 
