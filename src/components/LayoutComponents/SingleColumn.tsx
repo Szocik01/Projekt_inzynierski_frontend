@@ -13,7 +13,6 @@ const singleColumnCss = css({
   flexDirection: "row",
   flexWrap: "wrap",
   padding: "0 0.5rem",
-  minHeight: "100dvh",
   [mediaUp("sm")]: {
     width: "540px",
     margin: "0 auto",

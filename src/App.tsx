@@ -51,7 +51,7 @@ const App = () => {
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
-        minHeight: "100dvh"        
+        padding: "3rem 0"     
       }
     }}/>
     <Routes>
