@@ -154,7 +154,7 @@ const Register = () => {
         <form css={formStyles} onSubmit={registerHandler}>
         {isLoading && <ContentLoading coverParent={true} />}
         <h1 css={headerStyles}>
-            {resolveLastWordColor("Zaloguj się na Konto")}
+            {resolveLastWordColor("Zarejestruj się na Konto")}
         </h1>
           <AuthFormInputs
             values={registerData}
