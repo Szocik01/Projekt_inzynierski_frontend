@@ -36,6 +36,7 @@ const Login = () => {
     rememberMe: false,
   });
   const [httpError, setHttpError] = useState("");
+  const [console, setConsole] = useState("");
 
   const [sendLoginData, isLoading] = useHttp(
     `${API_CALL_URL_BASE}/api/routers/http/controllers/auth/login`
@@ -112,7 +113,7 @@ const Login = () => {
     const headers = {
       "Content-Type": "application/json",
     };
-
+    setConsole(JSON.stringify(body))
     sendLoginData(handleResponse, handleError, {
       method: "POST",
       headers: headers,
@@ -153,6 +154,7 @@ const Login = () => {
             }}
           />
           <div css={httpErrorStyles}>{httpError ? httpError : ""}</div>
+          <div>{console}</div>
           <Button
             variant="contained"
             disabled={!!emailError || !!passwordError}
