@@ -206,7 +206,7 @@ const Register = () => {
             and more recently with desktop publishing software like Aldus
             PageMaker including versions of Lorem Ipsum.
           </p>
-          <Link to="/register"><Button sx={buttonStyles} variant="contained" role="link" type="button">Zarejestruj się</Button></Link>
+          <Link to="/login"><Button sx={buttonStyles} variant="contained" role="link" type="button">Zarejestruj się</Button></Link>
         </div>
       </div>
     </SingleColumn>
