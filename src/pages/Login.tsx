@@ -5,10 +5,10 @@ import AuthFormInputs from "../components/AuthComponents/AuthFormInputs";
 import { Button } from "@mui/material";
 import useHttp from "../hooks/useHttp";
 import { API_CALL_URL_BASE } from "../utils/Constants";
-// import { useDispatch } from "react-redux";
-// import { authSliceActions } from "../storage/authSlice";
+import { useDispatch } from "react-redux";
+import { authSliceActions } from "../storage/authSlice";
 import ContentLoading from "../components/UtilityComponents/ContentLoading";
-// import setSingleCookie from "../utils/SetSingleCookie";
+import setSingleCookie from "../utils/SetSingleCookie";
 import parse from "html-react-parser";
 import {
   authPanelStyles,
@@ -41,7 +41,7 @@ const Login = () => {
     `${API_CALL_URL_BASE}/api/routers/http/controllers/auth/login`
   );
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const validateEmail = (email: string) => {
     if (email.trim().length === 0) {
@@ -65,32 +65,31 @@ const Login = () => {
 
   const handleResponse = (response: Response) => {
     console.log(response);
-    // if (response.status >= 500) {
-    //   throw new Error("Wystąpił wewnętrzny błąd serwera.");
-    // }
-    // if (response.status >= 400 && response.status <= 499) {
-    //   throw new Error("Podano niepoprawne dane");
-    // }
+    if (response.status >= 500) {
+      throw new Error("Wystąpił wewnętrzny błąd serwera.");
+    }
+    if (response.status >= 400 && response.status <= 499) {
+      throw new Error("Podano niepoprawne dane");
+    }
     return response.json().then((data) => {
       console.log(data);
-      setHttpError(`${data.message}, ${data.status}, ${data.server_message}`)
-      // setSingleCookie(
-      //   "token",
-      //   data.token.access_token,
-      //   loginData.rememberMe ? new Date(data.token.token_expire) : undefined
-      // );
-      // setSingleCookie(
-      //   "userId",
-      //   data.user.id,
-      //   loginData.rememberMe ? new Date(data.token.token_expire) : undefined
-      // );
+      setSingleCookie(
+        "token",
+        data.token.access_token,
+        loginData.rememberMe ? new Date(data.token.token_expire) : undefined
+      );
+      setSingleCookie(
+        "userId",
+        data.user.id,
+        loginData.rememberMe ? new Date(data.token.token_expire) : undefined
+      );
 
-      // dispatch(
-      //   authSliceActions.addUserData({
-      //     token: data.token.access_token,
-      //     userId: data.user.id,
-      //   })
-      // );
+      dispatch(
+        authSliceActions.addUserData({
+          token: data.token.access_token,
+          userId: data.user.id,
+        })
+      );
     });
   };
 
