@@ -37,7 +37,7 @@ export const formStyles = css({
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
-  padding: "2.5rem 2rem",
+  padding: "2.5rem 1rem",
   width: "100%",
   gap: "1rem",
   flexShrink: 0,
@@ -49,6 +49,7 @@ export const formStyles = css({
   },
   [mediaUp("md")]: {
     width: "60%",
+    padding: "2.5rem 2rem",
   },
 });
 
