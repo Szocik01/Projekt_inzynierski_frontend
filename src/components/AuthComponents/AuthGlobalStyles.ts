@@ -37,7 +37,7 @@ export const formStyles = css({
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
-  padding: "3rem 2rem",
+  padding: "2.5rem 2rem",
   width: "100%",
   gap: "1rem",
   flexShrink: 0,
@@ -70,7 +70,7 @@ export const descriptionPanelStyles = css({
   textAlign: "center",
   flexDirection: "column",
   gap: "1.2rem",
-  padding: "1rem",
+  padding: "2.5rem 1rem",
   background: "linear-gradient(180deg, #00FF7F 0%, #00ff7fb8 100%);",
   h2: {
     fontSize: "2.2rem",
