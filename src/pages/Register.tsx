@@ -8,12 +8,26 @@ import { API_CALL_URL_BASE } from "../utils/Constants";
 import { useDispatch } from "react-redux";
 import { authSliceActions } from "../storage/authSlice";
 import ContentLoading from "../components/UtilityComponents/ContentLoading";
-import { css } from "@emotion/react";
 import setSingleCookie from "../utils/SetSingleCookie";
+import parse from "html-react-parser";
+import {
+  authPanelStyles,
+  customSingleColumnStyles,
+  formStyles,
+  headerStyles,
+  descriptionPanelStyles,
+  buttonStyles,
+  httpErrorStyles
+} from "../components/AuthComponents/AuthGlobalStyles";
+import { Link } from "react-router-dom";
 
-const registerPanelStyles = css({
-  position: "relative",
-});
+function resolveLastWordColor(text: string) {
+  const splittedString = text.split(" ");
+  splittedString[splittedString.length - 1] = `<span>${
+    splittedString[splittedString.length - 1]
+  }</span>`;
+  return parse(splittedString.join(" "));
+}
 
 const Register = () => {
   const [registerData, setRegisterData] = useState({
@@ -135,10 +149,13 @@ const Register = () => {
   };
 
   return (
-    <SingleColumn>
-      <div css={registerPanelStyles}>
+    <SingleColumn customCss={customSingleColumnStyles}>
+      <div css={authPanelStyles}>
+        <form css={formStyles} onSubmit={registerHandler}>
         {isLoading && <ContentLoading coverParent={true} />}
-        <form onSubmit={registerHandler}>
+        <h1 css={headerStyles}>
+            {resolveLastWordColor("Zaloguj się na Konto")}
+        </h1>
           <AuthFormInputs
             values={registerData}
             valueErrors={{
@@ -159,7 +176,7 @@ const Register = () => {
               });
             }}
           />
-          <div>{httpError ? httpError : ""}</div>
+          <div css={httpErrorStyles}>{httpError ? httpError : ""}</div>
           <Button
             variant="contained"
             disabled={
@@ -169,11 +186,28 @@ const Register = () => {
               !!userNameError
             }
             type="submit"
+            sx={buttonStyles}
           >
             Zarejestruj
           </Button>
         </form>
-        <div></div>
+        <div css={descriptionPanelStyles}>
+          <h2>
+            Witaj Quizowiczu!
+          </h2>
+          <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since the 1500s , when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. It has survived not
+            only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s
+            with the release of Letraset sheets containing Lorem Ipsum passages,
+            and more recently with desktop publishing software like Aldus
+            PageMaker including versions of Lorem Ipsum.
+          </p>
+          <Link to="/register"><Button sx={buttonStyles} variant="contained" role="link" type="button">Zarejestruj się</Button></Link>
+        </div>
       </div>
     </SingleColumn>
   );

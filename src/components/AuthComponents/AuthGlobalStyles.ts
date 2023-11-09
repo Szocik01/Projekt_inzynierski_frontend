@@ -3,7 +3,6 @@ import { css } from "@emotion/react";
 import { mediaUp } from "../../utils/mediaQueries";
 
 export const authPanelStyles = css({
-  position: "relative",
   width: "100%",
   borderRadius: "30px",
   boxShadow: "0px 4px 100px 0px rgba(0, 0, 0, 0.25)",
@@ -20,7 +19,7 @@ export const customSingleColumnStyles = css({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: "calc(100dvh - 6rem)",
+  minHeight: "calc(100dvh - 6rem)",
   [mediaUp("lg")]: {
     padding: "0 1rem",
   },
@@ -34,12 +33,13 @@ export const customSingleColumnStyles = css({
 
 export const formStyles = css({
   backgroundColor: "white",
+  position:"relative",
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
   padding: "3rem 2rem",
   width: "100%",
-  gap: "1.5rem",
+  gap: "1rem",
   flexShrink: 0,
   ".MuiInputLabel-root.Mui-focused":{
     color:"#00F800"
@@ -50,9 +50,6 @@ export const formStyles = css({
   [mediaUp("md")]: {
     width: "60%",
   },
-//   [mediaUp('lg')]:{
-//     width: "65%"
-//   }
 });
 
 export const headerStyles = css({
@@ -100,7 +97,9 @@ export const buttonStyles ={
 }
 
 export const httpErrorStyles=css({
-    color:"#d32f2f"
+    color:"#d32f2f",
+    fontSize:"0.75rem",
+    height:"16.8px"
 })
 
 export const serializedButtonStyles = css(buttonStyles);

@@ -17,7 +17,7 @@ import {
   headerStyles,
   descriptionPanelStyles,
   buttonStyles,
-  httpErrorStyles
+  httpErrorStyles,
 } from "../components/AuthComponents/AuthGlobalStyles";
 import { Link } from "react-router-dom";
 
@@ -125,8 +125,8 @@ const Login = () => {
   return (
     <SingleColumn customCss={customSingleColumnStyles}>
       <div css={authPanelStyles}>
-        {isLoading && <ContentLoading coverParent={true} />}
         <form onSubmit={loginHandler} css={formStyles}>
+          {isLoading && <ContentLoading coverParent={true} />}
           <h1 css={headerStyles}>
             {resolveLastWordColor("Zaloguj się na Konto")}
           </h1>
@@ -162,9 +162,7 @@ const Login = () => {
           </Button>
         </form>
         <div css={descriptionPanelStyles}>
-          <h2>
-            Witaj Quizowiczu!
-          </h2>
+          <h2>Witaj Quizowiczu!</h2>
           <p>
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum has been the industry's standard dummy text
@@ -176,7 +174,16 @@ const Login = () => {
             and more recently with desktop publishing software like Aldus
             PageMaker including versions of Lorem Ipsum.
           </p>
-          <Link to="/register"><Button sx={buttonStyles} variant="contained" role="link" type="button">Zarejestruj się</Button></Link>
+          <Link to="/register">
+            <Button
+              sx={buttonStyles}
+              variant="contained"
+              role="link"
+              type="button"
+            >
+              Zarejestruj się
+            </Button>
+          </Link>
         </div>
       </div>
     </SingleColumn>
