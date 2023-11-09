@@ -103,6 +103,7 @@ const Register = () => {
       throw new Error("Niepoprawny login lub hasło");
     }
     return response.json().then((data) => {
+      console.log(data)
       setSingleCookie("token", data.token.access_token);
       setSingleCookie("userId", data.user.id);
 
