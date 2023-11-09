@@ -76,12 +76,12 @@ const Login = () => {
       setSingleCookie(
         "token",
         data.token.access_token,
-        loginData.rememberMe ? new Date(data.token.token_expire) : undefined
+        loginData.rememberMe ? data.token.token_expire : undefined
       );
       setSingleCookie(
         "userId",
         data.user.id,
-        loginData.rememberMe ? new Date(data.token.token_expire) : undefined
+        loginData.rememberMe ? data.token.token_expire : undefined
       );
 
       dispatch(
