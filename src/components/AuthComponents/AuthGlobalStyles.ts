@@ -41,6 +41,12 @@ export const formStyles = css({
   width: "100%",
   gap: "1.5rem",
   flexShrink: 0,
+  ".MuiInputLabel-root.Mui-focused":{
+    color:"#00F800"
+  },
+  ".MuiInputBase-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#00F800"
+  },
   [mediaUp("md")]: {
     width: "60%",
   },
