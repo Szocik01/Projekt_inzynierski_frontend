@@ -6,9 +6,9 @@ import { Button } from "@mui/material";
 import useHttp from "../hooks/useHttp";
 import { API_CALL_URL_BASE } from "../utils/Constants";
 import { useDispatch } from "react-redux";
-import { authSliceActions } from "../storage/authSlice";
+// import { authSliceActions } from "../storage/authSlice";
 import ContentLoading from "../components/UtilityComponents/ContentLoading";
-import setSingleCookie from "../utils/SetSingleCookie";
+// import setSingleCookie from "../utils/SetSingleCookie";
 import parse from "html-react-parser";
 import {
   authPanelStyles,
@@ -41,7 +41,7 @@ const Login = () => {
     `${API_CALL_URL_BASE}/api/routers/http/controllers/auth/login`
   );
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const validateEmail = (email: string) => {
     if (email.trim().length === 0) {
