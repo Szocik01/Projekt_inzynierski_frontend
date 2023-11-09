@@ -36,7 +36,6 @@ const Login = () => {
     rememberMe: false,
   });
   const [httpError, setHttpError] = useState("");
-  const [console, setConsole] = useState("");
 
   const [sendLoginData, isLoading] = useHttp(
     `${API_CALL_URL_BASE}/api/routers/http/controllers/auth/login`
@@ -65,6 +64,7 @@ const Login = () => {
   };
 
   const handleResponse = (response: Response) => {
+    console.log(response);
     // if (response.status >= 500) {
     //   throw new Error("Wystąpił wewnętrzny błąd serwera.");
     // }
@@ -72,6 +72,7 @@ const Login = () => {
     //   throw new Error("Podano niepoprawne dane");
     // }
     return response.json().then((data) => {
+      console.log(data);
       setHttpError(`${data.message}, ${data.status}, ${data.server_message}`)
       // setSingleCookie(
       //   "token",
@@ -113,7 +114,7 @@ const Login = () => {
     const headers = {
       "Content-Type": "application/json",
     };
-    setConsole(JSON.stringify(body))
+    console.log(body,JSON.stringify(body))
     sendLoginData(handleResponse, handleError, {
       method: "POST",
       headers: headers,
@@ -154,7 +155,6 @@ const Login = () => {
             }}
           />
           <div css={httpErrorStyles}>{httpError ? httpError : ""}</div>
-          <div>{console}</div>
           <Button
             variant="contained"
             disabled={!!emailError || !!passwordError}
