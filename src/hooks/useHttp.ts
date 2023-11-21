@@ -7,8 +7,8 @@ type SendRequestFunction = (
   urlParameters?: string
 ) => void;
 
-export default function useHttp(url: string):[SendRequestFunction,boolean] {
-  const [isLoading, setIsLoading] = useState(false);
+export default function useHttp(url: string, initialLoadingState: boolean = false):[SendRequestFunction,boolean] {
+  const [isLoading, setIsLoading] = useState(initialLoadingState);
 
   const sendRequest = useCallback(
     (

@@ -96,14 +96,10 @@ const Register = () => {
   const userNameError = validateUserName(registerData.userName);
 
   const handleResponse = (response: Response) => {
-    if (response.status >= 500) {
-      throw new Error("Wystąpił wewnętrzny błąd serwera.");
-    }
-    if (response.status >= 400 && response.status <= 499) {
-      throw new Error("Niepoprawny login lub hasło");
-    }
     return response.json().then((data) => {
-      console.log(data)
+      if (data.status_code >= 400 && data.status_code <= 599) {
+        throw new Error(data.message);
+      }
       setSingleCookie("token", data.token.access_token);
       setSingleCookie("userId", data.user.id);
 
@@ -153,7 +149,7 @@ const Register = () => {
     <SingleColumn customCss={customSingleColumnStyles}>
       <div css={authPanelStyles}>
         <form css={formStyles} onSubmit={registerHandler}>
-        {isLoading && <ContentLoading coverParent={true} />}
+        {isLoading && <ContentLoading coverParent={true} blurOverlay={true}/>}
         <h1 css={headerStyles}>
             {resolveLastWordColor("Zarejestruj się na Konto")}
         </h1>

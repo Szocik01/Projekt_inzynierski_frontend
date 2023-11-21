@@ -64,15 +64,10 @@ const Login = () => {
   };
 
   const handleResponse = (response: Response) => {
-    console.log(response);
-    if (response.status >= 500) {
-      throw new Error("Wystąpił wewnętrzny błąd serwera.");
-    }
-    if (response.status >= 400 && response.status <= 499) {
-      throw new Error("Podano niepoprawne dane");
-    }
     return response.json().then((data) => {
-      console.log(data);
+    if (data.status_code >= 400 && data.status_code <= 599) {
+      throw new Error(data.message);
+    }
       setSingleCookie(
         "token",
         data.token.access_token,
@@ -83,7 +78,13 @@ const Login = () => {
         data.user.id,
         loginData.rememberMe ? data.token.token_expire : undefined
       );
-
+      if(loginData.rememberMe){
+        setSingleCookie(
+          "rememberMe",
+          "1",
+          data.token.token_expire
+        );
+      }
       dispatch(
         authSliceActions.addUserData({
           token: data.token.access_token,
@@ -113,7 +114,6 @@ const Login = () => {
     const headers = {
       "Content-Type": "application/json",
     };
-    console.log(body,JSON.stringify(body))
     sendLoginData(handleResponse, handleError, {
       method: "POST",
       headers: headers,
@@ -128,7 +128,7 @@ const Login = () => {
     <SingleColumn customCss={customSingleColumnStyles}>
       <div css={authPanelStyles}>
         <form onSubmit={loginHandler} css={formStyles}>
-          {isLoading && <ContentLoading coverParent={true} />}
+          {isLoading && <ContentLoading coverParent={true} blurOverlay={true}/>}
           <h1 css={headerStyles}>
             {resolveLastWordColor("Zaloguj się na Konto")}
           </h1>

@@ -20,6 +20,14 @@ const authSlice = createSlice({
       state.token = action.payload.token;
     },
 
+    addUserId:(state, action: PayloadAction<string>) => {
+      state.userId = action.payload;
+    },
+
+    addUserToken:(state, action: PayloadAction<string>) => {
+      state.token = action.payload;
+    },
+
     deleteUserData: (state) => {
       state = { userId: "", token: "" };
     },
