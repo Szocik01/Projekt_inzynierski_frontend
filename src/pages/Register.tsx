@@ -17,7 +17,8 @@ import {
   headerStyles,
   descriptionPanelStyles,
   buttonStyles,
-  httpErrorStyles
+  httpErrorStyles,
+  redirectionSectionStyle
 } from "../components/AuthComponents/AuthGlobalStyles";
 import { Link } from "react-router-dom";
 
@@ -187,6 +188,10 @@ const Register = () => {
           >
             Zarejestruj
           </Button>
+          <span css={redirectionSectionStyle}>
+            Posiadasz już konto?{" "}
+            <Link to="/login">Zaloguj się</Link>
+          </span>
         </form>
         <div css={descriptionPanelStyles}>
           <h2>
@@ -203,7 +208,6 @@ const Register = () => {
             and more recently with desktop publishing software like Aldus
             PageMaker including versions of Lorem Ipsum.
           </p>
-          <Link to="/login"><Button sx={buttonStyles} variant="contained" role="link" type="button">Zaloguj się</Button></Link>
         </div>
       </div>
     </SingleColumn>

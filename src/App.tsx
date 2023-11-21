@@ -100,7 +100,7 @@ const App = () => {
             backgroundPosition: "center",
             backgroundSize: "cover",
             backgroundAttachment: "fixed",
-            padding: "3rem 0",
+            padding: "5rem 0 1rem 0",
           },
         }}
       />

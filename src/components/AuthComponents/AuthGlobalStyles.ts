@@ -8,7 +8,7 @@ export const authPanelStyles = css({
   boxShadow: "0px 4px 100px 0px rgba(0, 0, 0, 0.25)",
   overflowY: "hidden",
   display: "flex",
-  flexDirection: "column",
+  flexDirection: "column-reverse",
   flexWrap: "nowrap",
   [mediaUp("md")]: {
     flexDirection: "row",
@@ -37,9 +37,9 @@ export const formStyles = css({
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
-  padding: "2.5rem 1rem",
+  padding: "2rem 1rem",
   width: "100%",
-  gap: "1rem",
+  gap: "0.8rem",
   flexShrink: 0,
   ".MuiInputLabel-root.Mui-focused":{
     color:"#00F800"
@@ -49,7 +49,7 @@ export const formStyles = css({
   },
   [mediaUp("md")]: {
     width: "60%",
-    padding: "2.5rem 2rem",
+    padding: "2rem 2rem",
   },
 });
 
@@ -101,6 +101,14 @@ export const httpErrorStyles=css({
     color:"#d32f2f",
     fontSize:"0.75rem",
     height:"16.8px"
+})
+
+export const redirectionSectionStyle = css({
+  display: "block",
+  textAlign: "center",
+  [mediaUp("md")]:{
+    display: "none"
+  }
 })
 
 export const serializedButtonStyles = css(buttonStyles);

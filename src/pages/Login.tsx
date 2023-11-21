@@ -18,6 +18,7 @@ import {
   descriptionPanelStyles,
   buttonStyles,
   httpErrorStyles,
+  redirectionSectionStyle
 } from "../components/AuthComponents/AuthGlobalStyles";
 import { Link } from "react-router-dom";
 
@@ -65,9 +66,9 @@ const Login = () => {
 
   const handleResponse = (response: Response) => {
     return response.json().then((data) => {
-    if (data.status_code >= 400 && data.status_code <= 599) {
-      throw new Error(data.message);
-    }
+      if (data.status_code >= 400 && data.status_code <= 599) {
+        throw new Error(data.message);
+      }
       setSingleCookie(
         "token",
         data.token.access_token,
@@ -78,12 +79,8 @@ const Login = () => {
         data.user.id,
         loginData.rememberMe ? data.token.token_expire : undefined
       );
-      if(loginData.rememberMe){
-        setSingleCookie(
-          "rememberMe",
-          "1",
-          data.token.token_expire
-        );
+      if (loginData.rememberMe) {
+        setSingleCookie("rememberMe", "1", data.token.token_expire);
       }
       dispatch(
         authSliceActions.addUserData({
@@ -128,7 +125,9 @@ const Login = () => {
     <SingleColumn customCss={customSingleColumnStyles}>
       <div css={authPanelStyles}>
         <form onSubmit={loginHandler} css={formStyles}>
-          {isLoading && <ContentLoading coverParent={true} blurOverlay={true}/>}
+          {isLoading && (
+            <ContentLoading coverParent={true} blurOverlay={true} />
+          )}
           <h1 css={headerStyles}>
             {resolveLastWordColor("Zaloguj się na Konto")}
           </h1>
@@ -162,6 +161,10 @@ const Login = () => {
           >
             Zaloguj
           </Button>
+          <span css={redirectionSectionStyle}>
+            Nie posiadasz jeszcze konta?{" "}
+            <Link to="/register">Zarejestruj się</Link>
+          </span>
         </form>
         <div css={descriptionPanelStyles}>
           <h2>Witaj Quizowiczu!</h2>
@@ -176,16 +179,6 @@ const Login = () => {
             and more recently with desktop publishing software like Aldus
             PageMaker including versions of Lorem Ipsum.
           </p>
-          <Link to="/register">
-            <Button
-              sx={buttonStyles}
-              variant="contained"
-              role="link"
-              type="button"
-            >
-              Zarejestruj się
-            </Button>
-          </Link>
         </div>
       </div>
     </SingleColumn>
