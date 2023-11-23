@@ -5,12 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { ReduxAppState } from "./storage/redux";
 import PageNotFound from "./pages/PageNotFound";
 import { AuthSliceState, authSliceActions } from "./storage/authSlice";
-import { useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { Global } from "@emotion/react";
 import useHttp from "./hooks/useHttp";
 import { API_CALL_URL_BASE } from "./utils/Constants";
 import setSingleCookie from "./utils/SetSingleCookie";
 import ContentLoading from "./components/UtilityComponents/ContentLoading";
+import Navigation from "./components/NavigationComponents/Navigation";
 
 const App = () => {
   const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
@@ -27,7 +28,7 @@ const App = () => {
 
   const dispatch = useDispatch();
 
-  const handleResponse = (response: Response) => {
+  const handleResponse = useCallback((response: Response) => {
     return response.json().then((data) => {
       if (data.status_code >= 400 && data.status_code <= 599) {
         throw new Error(data.message);
@@ -41,12 +42,12 @@ const App = () => {
       }))
       setLoading(false);
     });
-  };
+  },[dispatch]);
 
-  const handleError = (error: Error) => {
+  const handleError = useCallback((error: Error) => {
     console.warn(error.message);
     setLoading(false);
-  };
+  },[]);
 
   useLayoutEffect(() => {
     const cookiesArray = document.cookie.split(";");
@@ -81,7 +82,7 @@ const App = () => {
         Authorization: `Bearer ${authData.token}`,
       },
     });
-  }, [dispatch]);
+  }, [dispatch,refreshToken,handleResponse,handleError]);
 
   return (
     <>
@@ -100,11 +101,12 @@ const App = () => {
             backgroundPosition: "center",
             backgroundSize: "cover",
             backgroundAttachment: "fixed",
-            padding: "5rem 0 1rem 0",
+            padding: "5.5rem 0 0.5rem 0",
           },
         }}
       />
       {isLoading && <ContentLoading blurOverlay={true}/>}
+      <Navigation/>
       <Routes>
         {token && userId ? (
           <Route

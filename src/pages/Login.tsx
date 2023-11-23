@@ -9,26 +9,18 @@ import { useDispatch } from "react-redux";
 import { authSliceActions } from "../storage/authSlice";
 import ContentLoading from "../components/UtilityComponents/ContentLoading";
 import setSingleCookie from "../utils/SetSingleCookie";
-import parse from "html-react-parser";
+import resolveLastWordColor from "../utils/ResolveLastWordColor";
 import {
   authPanelStyles,
   customSingleColumnStyles,
   formStyles,
   headerStyles,
   descriptionPanelStyles,
-  buttonStyles,
+  baseButtonStyles,
   httpErrorStyles,
-  redirectionSectionStyle
+  redirectionSectionStyles
 } from "../components/AuthComponents/AuthGlobalStyles";
 import { Link } from "react-router-dom";
-
-function resolveLastWordColor(text: string) {
-  const splittedString = text.split(" ");
-  splittedString[splittedString.length - 1] = `<span>${
-    splittedString[splittedString.length - 1]
-  }</span>`;
-  return parse(splittedString.join(" "));
-}
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -157,11 +149,11 @@ const Login = () => {
             variant="contained"
             disabled={!!emailError || !!passwordError}
             type="submit"
-            sx={buttonStyles}
+            sx={baseButtonStyles}
           >
             Zaloguj
           </Button>
-          <span css={redirectionSectionStyle}>
+          <span css={redirectionSectionStyles}>
             Nie posiadasz jeszcze konta?{" "}
             <Link to="/register">Zarejestruj się</Link>
           </span>

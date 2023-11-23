@@ -39,7 +39,7 @@ export const formStyles = css({
   flexDirection: "column",
   padding: "2rem 1rem",
   width: "100%",
-  gap: "0.8rem",
+  gap: "0.7rem",
   flexShrink: 0,
   ".MuiInputLabel-root.Mui-focused":{
     color:"#00F800"
@@ -84,7 +84,7 @@ export const descriptionPanelStyles = css({
   }
 });
 
-export const buttonStyles ={
+export const baseButtonStyles ={
     borderRadius: "20px",
     background: "linear-gradient(179deg, #00964B 1.16%, rgba(255, 255, 255, 0.5) 176.09%)",
     boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
@@ -103,7 +103,7 @@ export const httpErrorStyles=css({
     height:"16.8px"
 })
 
-export const redirectionSectionStyle = css({
+export const redirectionSectionStyles = css({
   display: "block",
   textAlign: "center",
   [mediaUp("md")]:{
@@ -111,4 +111,4 @@ export const redirectionSectionStyle = css({
   }
 })
 
-export const serializedButtonStyles = css(buttonStyles);
+export const serializedBaseButtonStyles = css(baseButtonStyles);
