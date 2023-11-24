@@ -13,7 +13,7 @@ const sidebarContainerStyles = css({
   padding: "2rem 0 ",
   overflowY: "auto",
   zIndex: 1000,
-  width: "22rem",
+  width:"100%",
   height: "calc(100dvh - 5rem)",
   right: 0,
   top: "100%",
@@ -39,6 +39,10 @@ const sidebarContainerStyles = css({
       backgroundColor: "white",
       color: "black",
     },
+  },
+  [mediaUp("sm")]:{
+  width: "22rem",
+    
   },
   [mediaUp("md")]: {
     display: "none",
