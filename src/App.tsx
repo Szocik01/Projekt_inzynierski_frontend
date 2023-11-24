@@ -12,6 +12,7 @@ import { API_CALL_URL_BASE } from "./utils/Constants";
 import setSingleCookie from "./utils/SetSingleCookie";
 import ContentLoading from "./components/UtilityComponents/ContentLoading";
 import Navigation from "./components/NavigationComponents/Navigation";
+import Main from "./pages/Main";
 
 const App = () => {
   const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
@@ -108,6 +109,7 @@ const App = () => {
       {isLoading && <ContentLoading blurOverlay={true}/>}
       <Navigation/>
       <Routes>
+        <Route path="/" element={<Main/>}/>
         {token && userId ? (
           <Route
             path="/register"
