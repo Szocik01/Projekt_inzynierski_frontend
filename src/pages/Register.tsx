@@ -16,10 +16,10 @@ import {
   formStyles,
   headerStyles,
   descriptionPanelStyles,
-  baseButtonStyles,
   httpErrorStyles,
   redirectionSectionStyles
 } from "../components/AuthComponents/AuthGlobalStyles";
+import { baseButtonStyles } from "../GlobalStyles";
 import { Link } from "react-router-dom";
 
 const Register = () => {
@@ -176,7 +176,7 @@ const Register = () => {
               !!userNameError
             }
             type="submit"
-            sx={baseButtonStyles}
+            sx={[baseButtonStyles,{textTransform:"uppercase"}]}
           >
             Zarejestruj
           </Button>

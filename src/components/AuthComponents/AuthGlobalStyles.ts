@@ -84,19 +84,6 @@ export const descriptionPanelStyles = css({
   }
 });
 
-export const baseButtonStyles ={
-    borderRadius: "20px",
-    background: "linear-gradient(179deg, #00964B 1.16%, rgba(255, 255, 255, 0.5) 176.09%)",
-    boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
-    color:"black",
-    "&.Mui-disabled":{
-        background: "rgba(0, 0, 0, 0.12)"
-    },
-    "&:hover":{
-        backgroundColor:"#00964B"
-    }
-}
-
 export const httpErrorStyles=css({
     color:"#d32f2f",
     fontSize:"0.75rem",
@@ -111,4 +98,3 @@ export const redirectionSectionStyles = css({
   }
 })
 
-export const serializedBaseButtonStyles = css(baseButtonStyles);

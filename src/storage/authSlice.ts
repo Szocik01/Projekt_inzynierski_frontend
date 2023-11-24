@@ -29,7 +29,8 @@ const authSlice = createSlice({
     },
 
     deleteUserData: (state) => {
-      state = { userId: "", token: "" };
+        state.userId = "";
+        state.token = "";
     },
   },
 });

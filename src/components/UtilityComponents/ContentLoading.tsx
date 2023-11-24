@@ -14,7 +14,7 @@ const loadingContainerStyles = css({
   alignItems: "center",
   position: "fixed",
   inset: 0,
-  zIndex: 5,
+  zIndex: 2000,
 });
 
 const coverParentStyles = css({
