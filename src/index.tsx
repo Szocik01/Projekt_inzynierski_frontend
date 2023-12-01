@@ -9,6 +9,20 @@ const theme = createTheme({
   typography: {
     fontFamily: ["Secular One", "sans-serif"].join(","),
   },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          ".MuiInputLabel-root.Mui-focused": {
+            color: "#00F800",
+          },
+          ".MuiInputBase-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#00F800",
+          },
+        },
+      },
+    },
+  },
 });
 
 const root = ReactDOM.createRoot(
@@ -18,7 +32,7 @@ root.render(
   <ThemeProvider theme={theme}>
     <BrowserRouter>
       <Provider store={store}>
-          <App />
+        <App />
       </Provider>
     </BrowserRouter>
   </ThemeProvider>

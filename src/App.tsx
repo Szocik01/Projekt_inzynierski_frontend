@@ -13,6 +13,7 @@ import setSingleCookie from "./utils/SetSingleCookie";
 import ContentLoading from "./components/UtilityComponents/ContentLoading";
 import Navigation from "./components/NavigationComponents/Navigation";
 import Main from "./pages/Main";
+import AddQuiz from "./pages/AddQuiz";
 
 const App = () => {
   const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
@@ -110,6 +111,7 @@ const App = () => {
       <Navigation/>
       <Routes>
         <Route path="/" element={<Main/>}/>
+        <Route path="/add-quiz" element={<AddQuiz/>}/>
         {token && userId ? (
           <Route
             path="/register"

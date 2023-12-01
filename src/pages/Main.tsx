@@ -102,8 +102,8 @@ const Main = () => {
         </Button>
       </Link>
       <div css={cardsContainerStyles}>
-        {cardsDataArray.map((item) => {
-          return <Card {...item} />;
+        {cardsDataArray.map((item,index) => {
+          return <Card key={index} {...item} />;
         })}
       </div>
     </SingleColumn>
