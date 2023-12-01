@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { ReduxAppState } from "../storage/redux";
 import { AuthSliceState } from "../storage/authSlice";
 import ContentLoading from "../components/UtilityComponents/ContentLoading";
+import { mediaUp } from "../utils/mediaQueries";
 
 const descriptionContainerStyles = css({
   color: "white",
@@ -37,32 +38,42 @@ const descriptionStyles = css({
 });
 
 const addQuizFormStyles = css({
-  position:"relative",
+  position: "relative",
   width: "100%",
-  display: "grid",
+  display: "flex",
   padding: "1rem 1.2rem",
-  gridTemplateAreas: `
-  "inlineinputssection imagesection"
-  "buttonsection descriptionsection"
-`,
-  gridTemplateColumns: "3fr 2fr",
+  flexDirection: "column",
   gap: "1.5rem",
   ".text-field": {
-    gridArea: "inlineinputssection",
     ".MuiInputBase-root": {
       backgroundColor: "#FFFFFFcc",
     },
   },
   ".multiline-field": {
-    gridArea: "descriptionsection",
     ".MuiInputBase-root": {
       backgroundColor: "#FFFFFFcc",
     },
   },
   ".drop-zone": {
-    gridArea: "imagesection",
     label: {
       backgroundColor: "#FFFFFFcc",
+    },
+  },
+  [mediaUp("sm")]: {
+    display: "grid",
+    gridTemplateColumns: "3fr 2fr",
+    gridTemplateAreas: `
+    "inlineinputssection imagesection"
+    "buttonsection descriptionsection"
+  `,
+    ".text-field": {
+      gridArea: "inlineinputssection",
+    },
+    ".multiline-field": {
+      gridArea: "descriptionsection",
+    },
+    ".drop-zone": {
+      gridArea: "imagesection",
     },
   },
 });
@@ -146,14 +157,14 @@ const AddQuiz = () => {
     formData.append("name", title);
     formData.append("description", description);
     formData.append("user_id", userId);
-    if(file !== null){
+    if (file !== null) {
       formData.append("image", file as Blob);
     }
     addQuiz(handleResponse, handleError, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept:	"application/json"
+        Accept: "application/json",
       },
       body: formData,
     });
@@ -169,6 +180,11 @@ const AddQuiz = () => {
     const allowedExtensionsRegex = /\.(jpg|jpeg|png|svg)$/i;
     if (!allowedExtensionsRegex.test(file.name)) {
       setPhotoError("Niedozwolone rozszerzenie pliku.");
+      return;
+    }
+
+    if (file.name.includes(" ")) {
+      setPhotoError("Nazwa pliku nie może zawierać spacji.");
       return;
     }
 
@@ -188,7 +204,6 @@ const AddQuiz = () => {
   function descriptionChangeHansler(text: string) {
     setDesctiption(text);
   }
-
 
   function validateTitle(): string {
     if (title.trim().length <= 10 || title.trim().length >= 40) {
@@ -219,8 +234,12 @@ const AddQuiz = () => {
       </div>
       <div css={formContainerStyles}>
         <h3 css={sectionHeaderStyles}>Generator Quizu</h3>
-        <form css={addQuizFormStyles} onSubmit={addQuizHandler} encType='multipart/form-data'>
-        {isLoading && <ContentLoading coverParent blurOverlay/>}
+        <form
+          css={addQuizFormStyles}
+          onSubmit={addQuizHandler}
+          encType="multipart/form-data"
+        >
+          {isLoading && <ContentLoading coverParent blurOverlay />}
           <QuizDataCard
             textFieldValue={title}
             multilineFieldValue={description}
