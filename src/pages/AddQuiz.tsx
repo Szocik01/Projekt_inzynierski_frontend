@@ -67,7 +67,7 @@ const addQuizFormStyles = css({
   },
 });
 
-const formContainer = css({
+const formContainerStyles = css({
   borderRadius: "20px",
   background: "#FFFFFFbb",
   overflow: "hidden",
@@ -159,6 +159,10 @@ const AddQuiz = () => {
     });
   }
 
+  function imageDeleteHandler() {
+    setFile(null);
+  }
+
   function fileChangeHandler(files: FileList) {
     const file = files[0];
 
@@ -213,7 +217,7 @@ const AddQuiz = () => {
           scrambled it to make a type specimen book.
         </span>
       </div>
-      <div css={formContainer}>
+      <div css={formContainerStyles}>
         <h3 css={sectionHeaderStyles}>Generator Quizu</h3>
         <form css={addQuizFormStyles} onSubmit={addQuizHandler} encType='multipart/form-data'>
         {isLoading && <ContentLoading coverParent blurOverlay/>}
@@ -231,6 +235,7 @@ const AddQuiz = () => {
             textFieldError={validateTitle()}
             multilineFieldError={validateDescription()}
             photoError={photoError}
+            onImageDelete={imageDeleteHandler}
           />
           <div css={buttonGridContainerStyles}>
             <Button
