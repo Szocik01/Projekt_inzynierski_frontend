@@ -85,10 +85,8 @@ const UserQuizes = () => {
       sideElement={<AddQuizRedirectSection />}
     >
       <ContentContainer isLoading={isLoading} title="Twoje Quizy">
-        {quizes.length === 0 ? (
-          <h4 css={noQuizesStyles}>Nie dodałeś jeszcze quizów</h4>
-        ) : (
-          quizes.map((quiz) => {
+        {(quizes.length === 0 && !isLoading) && <h4 css={noQuizesStyles}>Nie dodałeś jeszcze quizów</h4>} 
+        {(quizes.length > 0 && !isLoading) && quizes.map((quiz) => {
             return (
                 <UserQuizesListingCard
                 key={quiz.id}
@@ -96,7 +94,7 @@ const UserQuizes = () => {
                   imageUrl={quiz.link_image}
                   title={quiz.name}
                   content={quiz.description}
-                  editButtonRedirectionLink="/"
+                  editButtonRedirectionLink={`/edit-quiz/${quiz.id}`}
                   cardRedirectionLink="/quizes"
                   onAfterHttpDeleteSuccess={afterHttpDeleteSuccessHandler}
                   customStyles={css({
@@ -107,7 +105,7 @@ const UserQuizes = () => {
                   })}
                 />
             );
-          })
+          }
         )}
       </ContentContainer>
     </TwoColumns>

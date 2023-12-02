@@ -12,8 +12,8 @@ import { API_CALL_URL_BASE } from "../utils/Constants";
 import { useSelector } from "react-redux";
 import { ReduxAppState } from "../storage/redux";
 import { AuthSliceState } from "../storage/authSlice";
-import ContentLoading from "../components/UtilityComponents/ContentLoading";
 import { mediaUp } from "../utils/mediaQueries";
+import ContentContainer from "../components/UtilityComponents/ContentContainer";
 
 const descriptionContainerStyles = css({
   color: "white",
@@ -78,27 +78,6 @@ const addQuizFormStyles = css({
   },
 });
 
-const formContainerStyles = css({
-  borderRadius: "20px",
-  background: "#FFFFFFbb",
-  overflow: "hidden",
-  display: "flex",
-  flexDirection: "column",
-  width: "100%",
-});
-
-const sectionHeaderStyles = css({
-  color: "#000",
-  textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-  fontSize: "1.2rem",
-  textDecoration: "capitalize",
-  textAlign: "center",
-  background: "#fff",
-  padding: "0.4rem 0",
-  width: "100%",
-  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.2)",
-});
-
 const customButtonStyles = css({
   height: "fit-content",
   width: "fit-content",
@@ -142,7 +121,6 @@ const AddQuiz = () => {
       if (data.status_code >= 400 && data.status_code <= 599) {
         throw new Error(data.message);
       }
-      console.log(data);
     });
   }
 
@@ -232,18 +210,16 @@ const AddQuiz = () => {
           scrambled it to make a type specimen book.
         </span>
       </div>
-      <div css={formContainerStyles}>
-        <h3 css={sectionHeaderStyles}>Generator Quizu</h3>
+      <ContentContainer title="Stwórz Quiz" isLoading={isLoading}>
         <form
           css={addQuizFormStyles}
           onSubmit={addQuizHandler}
-          encType="multipart/form-data"
         >
-          {isLoading && <ContentLoading coverParent blurOverlay />}
           <QuizDataCard
             textFieldValue={title}
             multilineFieldValue={description}
-            file={file}
+            fileName={file ? file.name : ""}
+            imagePreviewUrl={file ? URL.createObjectURL(file) : ""}
             onTextFieldChange={titleChangeHandler}
             onMultilineFieldChange={descriptionChangeHansler}
             onFileChange={fileChangeHandler}
@@ -267,7 +243,7 @@ const AddQuiz = () => {
             <span css={httpErrorStyles}>{httpError}</span>
           </div>
         </form>
-      </div>
+        </ContentContainer>
     </SingleColumn>
   );
 };

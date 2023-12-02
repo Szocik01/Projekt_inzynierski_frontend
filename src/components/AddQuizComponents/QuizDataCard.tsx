@@ -6,7 +6,8 @@ import PhotoUpload from "../UtilityComponents/PhotoUpload";
 
 
 type QuizDataCardProps = {
-  file?: File | null;
+  fileName?: string;
+  imagePreviewUrl?: string;
   textFieldValue?: string;
   multilineFieldValue?: string;
   fieldsLabel?: {
@@ -28,7 +29,8 @@ const QuizDataCard: FC<QuizDataCardProps> = (props) => {
     multilineField: false,
   });
   const {
-    file,
+    imagePreviewUrl,
+    fileName,
     textFieldValue,
     multilineFieldValue,
     fieldsLabel,
@@ -61,8 +63,6 @@ const QuizDataCard: FC<QuizDataCardProps> = (props) => {
   ) {
     onMultilineFieldChange(event.target.value);
   }
-
-  const previewImageUrl = file ? URL.createObjectURL(file) : null;
 
   return (
     <>
@@ -104,11 +104,11 @@ const QuizDataCard: FC<QuizDataCardProps> = (props) => {
           className="multiline-field"
         />
       )}
-      {file !== undefined && (
+      {(imagePreviewUrl !== undefined || fileName !== undefined) && (
         <PhotoUpload
-          text={file ? file.name : photoError}
+          text={fileName ? fileName : photoError}
           onChange={onFileChange}
-          previewImageUrl={previewImageUrl}
+          previewImageUrl={imagePreviewUrl}
           onImageDelete={onImageDelete}
         />
       )}

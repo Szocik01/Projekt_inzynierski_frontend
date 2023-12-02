@@ -6,7 +6,7 @@ import { ReduxAppState } from "./storage/redux";
 import PageNotFound from "./pages/PageNotFound";
 import { AuthSliceState, authSliceActions } from "./storage/authSlice";
 import { useCallback, useLayoutEffect, useState } from "react";
-import { Global } from "@emotion/react";
+import { Global, css } from "@emotion/react";
 import useHttp from "./hooks/useHttp";
 import { API_CALL_URL_BASE } from "./utils/Constants";
 import setSingleCookie from "./utils/SetSingleCookie";
@@ -16,6 +16,8 @@ import Main from "./pages/Main";
 import AddQuiz from "./pages/AddQuiz";
 import EditQuiz from "./pages/EditQuiz";
 import UserQuizes from "./pages/UserQuizes";
+import deleteSingleCookie from "./utils/DeleteSingleCookie";
+import Quizes from "./pages/Quizes";
 
 const App = () => {
   const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
@@ -49,6 +51,9 @@ const App = () => {
   },[dispatch]);
 
   const handleError = useCallback((error: Error) => {
+    deleteSingleCookie("token");
+    deleteSingleCookie("userId");
+    deleteSingleCookie("rememberMe");
     console.warn(error.message);
     setLoading(false);
   },[]);
@@ -75,7 +80,7 @@ const App = () => {
         authData.userId = splittedCookie[1].trim();
       }
     }
-    if (authData.token === "" || authData.userId === "") {
+    if (!authData.token || !authData.userId) {
       setLoading(false);
       return;
     }
@@ -109,13 +114,14 @@ const App = () => {
           },
         }}
       />
-      {isLoading && <ContentLoading blurOverlay={true}/>}
+      {isLoading && <ContentLoading blurOverlay={true} customCss={css({zIndex:2000})}/>}
       <Navigation/>
       <Routes>
         <Route path="/" element={<Main/>}/>
         <Route path="/add-quiz" element={<AddQuiz/>}/>
-        <Route path="/edit-quiz/:id" element={<EditQuiz/>}/>
+        <Route path="/edit-quiz/:quizId" element={<EditQuiz/>}/>
         <Route path="/user-quizes" element={<UserQuizes/>}/>
+        <Route path="/quizes" element={<Quizes/>}/>
         {token && userId ? (
           <Route
             path="/register"

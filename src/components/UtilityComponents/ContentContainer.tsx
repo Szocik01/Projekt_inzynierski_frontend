@@ -25,11 +25,13 @@ const sectionHeaderStyles = css({
 });
 
 const innerContainerStyles = css({
+  width: "100%",
   position:"relative",
   display: "flex",
   flexDirection: "column",
   gap: "1rem",
   padding: "1rem 1.2rem",
+  minHeight: "6rem",
 });
 
 type ContentContainerProps = {

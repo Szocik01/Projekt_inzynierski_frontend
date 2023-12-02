@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { FC } from "react";
 import { CircularProgress } from "@mui/material";
-import {css} from "@emotion/react";
+import {SerializedStyles, css} from "@emotion/react";
 
 type ContentLoadingProps = {
   coverParent?: boolean,
   blurOverlay?: boolean
+  customCss?: SerializedStyles
 }
 
 const loadingContainerStyles = css({
@@ -14,7 +15,7 @@ const loadingContainerStyles = css({
   alignItems: "center",
   position: "fixed",
   inset: 0,
-  zIndex: 2000,
+  zIndex: 1500,
 });
 
 const coverParentStyles = css({
@@ -28,9 +29,9 @@ const blurOverlayStyles = css({
 })
 
 const ContentLoading: FC<ContentLoadingProps> = (props) => {
-  const {coverParent, blurOverlay} = props;
+  const {coverParent, blurOverlay, customCss} = props;
   return (
-    <div css={[loadingContainerStyles, coverParent && coverParentStyles, blurOverlay && blurOverlayStyles]} >
+    <div css={[loadingContainerStyles, coverParent && coverParentStyles, blurOverlay && blurOverlayStyles, customCss]} >
       <CircularProgress sx={{ color: "black" }} />
     </div>
   );

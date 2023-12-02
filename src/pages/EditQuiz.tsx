@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import SingleColumn from "../components/LayoutComponents/SingleColumn";
 import QuizDataCard from "../components/AddQuizComponents/QuizDataCard";
 import { css } from "@emotion/react";
@@ -12,7 +12,9 @@ import { API_CALL_URL_BASE } from "../utils/Constants";
 import { useSelector } from "react-redux";
 import { ReduxAppState } from "../storage/redux";
 import { AuthSliceState } from "../storage/authSlice";
-import ContentLoading from "../components/UtilityComponents/ContentLoading";
+import ContentContainer from "../components/UtilityComponents/ContentContainer";
+import { useNavigate, useParams } from "react-router-dom";
+import { mediaUp } from "../utils/mediaQueries";
 
 const descriptionContainerStyles = css({
   color: "white",
@@ -37,55 +39,44 @@ const descriptionStyles = css({
 });
 
 const addQuizFormStyles = css({
-  position:"relative",
+  position: "relative",
   width: "100%",
-  display: "grid",
+  display: "flex",
   padding: "1rem 1.2rem",
-  gridTemplateAreas: `
-  "inlineinputssection imagesection"
-  "buttonsection descriptionsection"
-`,
-  gridTemplateColumns: "3fr 2fr",
+  flexDirection: "column",
   gap: "1.5rem",
   ".text-field": {
-    gridArea: "inlineinputssection",
     ".MuiInputBase-root": {
       backgroundColor: "#FFFFFFcc",
     },
   },
   ".multiline-field": {
-    gridArea: "descriptionsection",
     ".MuiInputBase-root": {
       backgroundColor: "#FFFFFFcc",
     },
   },
   ".drop-zone": {
-    gridArea: "imagesection",
     label: {
       backgroundColor: "#FFFFFFcc",
     },
   },
-});
-
-const formContainer = css({
-  borderRadius: "20px",
-  background: "#FFFFFFbb",
-  overflow: "hidden",
-  display: "flex",
-  flexDirection: "column",
-  width: "100%",
-});
-
-const sectionHeaderStyles = css({
-  color: "#000",
-  textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-  fontSize: "1.2rem",
-  textDecoration: "capitalize",
-  textAlign: "center",
-  background: "#fff",
-  padding: "0.4rem 0",
-  width: "100%",
-  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.2)",
+  [mediaUp("sm")]: {
+    display: "grid",
+    gridTemplateColumns: "3fr 2fr",
+    gridTemplateAreas: `
+    "inlineinputssection imagesection"
+    "buttonsection descriptionsection"
+  `,
+    ".text-field": {
+      gridArea: "inlineinputssection",
+    },
+    ".multiline-field": {
+      gridArea: "descriptionsection",
+    },
+    ".drop-zone": {
+      gridArea: "imagesection",
+    },
+  },
 });
 
 const customButtonStyles = css({
@@ -121,7 +112,10 @@ const EditQuiz = () => {
     `${API_CALL_URL_BASE}/api/routers/http/controllers/quiz/edit_quiz`
   );
 
-//   const [getQuiz, isGetLoading] = useHttp;
+  const [getQuiz, isGetLoading] = useHttp(
+    `${API_CALL_URL_BASE}/api/routers/http/controllers/quiz/get_single_quiz`,
+    true
+  );
 
   const { userId, token } = useSelector<ReduxAppState, AuthSliceState>(
     (state) => {
@@ -129,16 +123,35 @@ const EditQuiz = () => {
     }
   );
 
-  function handleResponse(response: Response) {
+  const { quizId } = useParams();
+  const navigation = useNavigate()
+
+
+  const handleGetResponse = useCallback((response: Response) => {
     return response.json().then((data) => {
       if (data.status_code >= 400 && data.status_code <= 599) {
         throw new Error(data.message);
       }
-      console.log(data);
+      setTitle(data.name);
+      setDesctiption(data.description);
+      setInitialImageUrl(data.link_image);
+    });
+  }, []);
+
+  const handleGetError = useCallback((error: Error) => {
+    setHttpError(error.message);
+  }, []);
+
+  function handleEditResponse(response: Response) {
+    return response.json().then((data) => {
+      if (data.status_code >= 400 && data.status_code <= 599) {
+        throw new Error(data.message);
+      }
+      navigation("/user-quizes");
     });
   }
 
-  function handleError(error: Error) {
+  function handleEditError(error: Error) {
     setHttpError(error.message);
   }
 
@@ -146,18 +159,18 @@ const EditQuiz = () => {
     event.preventDefault();
     setHttpError("");
     const formData = new FormData();
-    // formData.append("id");
+    formData.append("id", quizId ? quizId : "");
     formData.append("name", title);
     formData.append("description", description);
     formData.append("user_id", userId);
-    if(file !== null){
+    if (file !== null) {
       formData.append("image", file as Blob);
     }
-    editQuiz(handleResponse, handleError, {
+    editQuiz(handleEditResponse, handleEditError, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept:	"application/json"
+        Accept: "application/json",
       },
       body: formData,
     });
@@ -189,7 +202,6 @@ const EditQuiz = () => {
     setDesctiption(text);
   }
 
-
   function validateTitle(): string {
     if (title.trim().length <= 10 || title.trim().length >= 40) {
       return "Niepoprawna długość nazwy quizu";
@@ -204,6 +216,29 @@ const EditQuiz = () => {
     return "";
   }
 
+  function imageDeleteHandler() {
+    setFile(null);
+    setInitialImageUrl("");
+  }
+
+  useEffect(() => {
+    if (!token || !userId || !quizId) {
+      return;
+    }
+    getQuiz(handleGetResponse, handleGetError, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        quiz_id: quizId,
+      }),
+    });
+  }, [getQuiz, handleGetResponse, handleGetError, token, userId, quizId]);
+
   return (
     <SingleColumn customCss={css({ rowGap: "1.5rem" })}>
       <h1 css={titleStyles}>
@@ -217,17 +252,21 @@ const EditQuiz = () => {
           scrambled it to make a type specimen book.
         </span>
       </div>
-      <div css={formContainer}>
-        <h3 css={sectionHeaderStyles}>Generator Quizu</h3>
-        <form css={addQuizFormStyles} onSubmit={editQuizHandler} encType='multipart/form-data'>
-        {isEditLoading && <ContentLoading coverParent blurOverlay/>}
+      <ContentContainer isLoading={isEditLoading || isGetLoading} title="Generator Quizu">
+        <form
+          css={addQuizFormStyles}
+          onSubmit={editQuizHandler}
+          encType="multipart/form-data"
+        >
           <QuizDataCard
             textFieldValue={title}
             multilineFieldValue={description}
-            file={file}
+            fileName={file ? file.name : ""}
+            imagePreviewUrl={file ? URL.createObjectURL(file) : initialImageUrl}
             onTextFieldChange={titleChangeHandler}
             onMultilineFieldChange={descriptionChangeHansler}
             onFileChange={fileChangeHandler}
+            onImageDelete={imageDeleteHandler}
             fieldsLabel={{
               textFieldLabel: "Tytuł quizu",
               multilineFieldLabel: "Opis Quizu",
@@ -242,12 +281,12 @@ const EditQuiz = () => {
               type="submit"
               css={[baseButtonStyles, customButtonStyles]}
             >
-              Stwórz Quiz
+              Edytuj i wróć
             </Button>
             <span css={httpErrorStyles}>{httpError}</span>
           </div>
         </form>
-      </div>
+      </ContentContainer>
     </SingleColumn>
   );
 };
