@@ -14,6 +14,8 @@ import ContentLoading from "./components/UtilityComponents/ContentLoading";
 import Navigation from "./components/NavigationComponents/Navigation";
 import Main from "./pages/Main";
 import AddQuiz from "./pages/AddQuiz";
+import EditQuiz from "./pages/EditQuiz";
+import UserQuizes from "./pages/UserQuizes";
 
 const App = () => {
   const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
@@ -112,6 +114,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Main/>}/>
         <Route path="/add-quiz" element={<AddQuiz/>}/>
+        <Route path="/edit-quiz/:id" element={<EditQuiz/>}/>
+        <Route path="/user-quizes" element={<UserQuizes/>}/>
         {token && userId ? (
           <Route
             path="/register"
