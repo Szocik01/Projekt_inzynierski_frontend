@@ -22,7 +22,7 @@ const navbarStyles = css({
   backgroundSize: "100% 200%",
   backgroundPositionY: "bottom",
   backdropFilter: "blur( 1.5px )",
-  gap: "2rem",
+  gap: "1rem",
   a: {
     fontSize: "14px",
     color: "black",
@@ -53,6 +53,7 @@ const navbarUnfoldedStyles = css({
 });
 
 const navbarSideLeftStyles = css({
+  flex:"1 1 0",
   fontSize: "1.6rem",
   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
   flexShrink: 0,
@@ -105,6 +106,7 @@ const navbarCenterStyles = css({
 });
 
 const menuTogglerStyles = css({
+  flexShrink: 0,
   display: "block",
   width: "2rem",
   height: "1.5rem",
@@ -145,9 +147,10 @@ const activeTogglerStyles = css({
 const navbarSideRightStyles = css({
   display: "none",
   [mediaUp("md")]: {
-    flexShrink: 0,
+    flex: "1 1 0",
     display: "flex",
     alignItems: "center",
+    justifyContent: "flex-end",
     gap: "1.5rem",
     a: {
       color: "#00F800",
