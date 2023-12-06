@@ -18,6 +18,7 @@ import EditQuiz from "./pages/EditQuiz";
 import UserQuizes from "./pages/UserQuizes";
 import deleteSingleCookie from "./utils/DeleteSingleCookie";
 import Quizes from "./pages/Quizes";
+import AddQuestion from "./pages/AddQuestion";
 
 const App = () => {
   const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
@@ -122,6 +123,7 @@ const App = () => {
         <Route path="/edit-quiz/:quizId" element={<EditQuiz/>}/>
         <Route path="/user-quizes" element={<UserQuizes/>}/>
         <Route path="/quizes" element={<Quizes/>}/>
+        <Route path="add-question/:quizId" element={<AddQuestion/>}/>
         {token && userId ? (
           <Route
             path="/register"

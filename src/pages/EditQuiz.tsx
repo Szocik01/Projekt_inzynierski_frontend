@@ -2,7 +2,7 @@
 
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import SingleColumn from "../components/LayoutComponents/SingleColumn";
-import QuizDataCard from "../components/AddQuizComponents/QuizDataCard";
+import InputsCard from "../components/UtilityComponents/InputsCard";
 import { css } from "@emotion/react";
 import resolveLastWordColor from "../utils/ResolveLastWordColor";
 import { Button } from "@mui/material";
@@ -258,7 +258,7 @@ const EditQuiz = () => {
           onSubmit={editQuizHandler}
           encType="multipart/form-data"
         >
-          <QuizDataCard
+          <InputsCard
             textFieldValue={title}
             multilineFieldValue={description}
             fileName={file ? file.name : ""}

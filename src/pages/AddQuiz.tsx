@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import SingleColumn from "../components/LayoutComponents/SingleColumn";
-import QuizDataCard from "../components/AddQuizComponents/QuizDataCard";
+import InputsCard from "../components/UtilityComponents/InputsCard";
 import { css } from "@emotion/react";
 import resolveLastWordColor from "../utils/ResolveLastWordColor";
 import { Button } from "@mui/material";
@@ -215,7 +215,7 @@ const AddQuiz = () => {
           css={addQuizFormStyles}
           onSubmit={addQuizHandler}
         >
-          <QuizDataCard
+          <InputsCard
             textFieldValue={title}
             multilineFieldValue={description}
             fileName={file ? file.name : ""}

@@ -22,8 +22,28 @@ const theme = createTheme({
         },
       },
     },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          backgroundColor:"#FFFFFF",
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#00F800",
+          },
+        },
+      },
+    },
+    MuiInputLabel:{
+      styleOverrides:{
+        root:{
+          "&.Mui-focused":{
+            color: "#00F800",
+          }
+        }
+      }
+    },
+    }
   },
-});
+);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

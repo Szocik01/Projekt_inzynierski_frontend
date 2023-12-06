@@ -1,11 +1,7 @@
 import { useCallback, useState } from "react";
+import { SendRequestFunction } from "../types/UtilityTypes";
 
-type SendRequestFunction = (
-  handleResponse?: (response: Response) => void,
-  handleError?: (error: Error) => void,
-  requestOptions?: RequestInit | undefined,
-  urlParameters?: string
-) => void;
+
 
 export default function useHttp(url: string, initialLoadingState: boolean = false):[SendRequestFunction,boolean] {
   const [isLoading, setIsLoading] = useState(initialLoadingState);

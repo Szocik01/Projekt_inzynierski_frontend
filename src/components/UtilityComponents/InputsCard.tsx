@@ -2,10 +2,11 @@
 
 import { TextField } from "@mui/material";
 import { FocusEvent, ChangeEvent, FC, useState } from "react";
-import PhotoUpload from "../UtilityComponents/PhotoUpload";
+import PhotoUpload from "./PhotoUpload";
 
 
 type QuizDataCardProps = {
+  cardId?: string;
   fileName?: string;
   imagePreviewUrl?: string;
   textFieldValue?: string;
@@ -14,13 +15,13 @@ type QuizDataCardProps = {
     textFieldLabel?: string;
     multilineFieldLabel?: string;
   };
-  onTextFieldChange: (text: string) => void;
-  onMultilineFieldChange: (text: string) => void;
-  onFileChange: (files: FileList) => void;
+  onTextFieldChange?: (text: string, cardId?: string) => void;
+  onMultilineFieldChange?: (text: string, cardId?: string) => void;
+  onFileChange?: (files: FileList, cardId?: string) => void;
   textFieldError?: string;
   multilineFieldError?: string;
   photoError?: string;
-  onImageDelete?: () => void;
+  onImageDelete?: (cardId?: string) => void;
 };
 
 const QuizDataCard: FC<QuizDataCardProps> = (props) => {
@@ -29,6 +30,7 @@ const QuizDataCard: FC<QuizDataCardProps> = (props) => {
     multilineField: false,
   });
   const {
+    cardId,
     imagePreviewUrl,
     fileName,
     textFieldValue,
@@ -55,13 +57,29 @@ const QuizDataCard: FC<QuizDataCardProps> = (props) => {
   }
 
   function textFieldChangeHandler(event: ChangeEvent<HTMLInputElement>) {
-    onTextFieldChange(event.target.value);
+    if(onTextFieldChange){
+      onTextFieldChange(event.target.value, cardId);
+    }
   }
 
   function multilineFieldChangeHandler(
     event: ChangeEvent<HTMLTextAreaElement>
   ) {
-    onMultilineFieldChange(event.target.value);
+    if(onMultilineFieldChange){
+      onMultilineFieldChange(event.target.value, cardId);
+    }
+  }
+
+  function onFileChangeHandler(files: FileList) {
+    if(onFileChange){
+      onFileChange(files, cardId);
+    }
+  }
+
+  function onFileDeleteHandler() {
+    if(onImageDelete){
+      onImageDelete(cardId);
+    }
   }
 
   return (
@@ -104,12 +122,12 @@ const QuizDataCard: FC<QuizDataCardProps> = (props) => {
           className="multiline-field"
         />
       )}
-      {(imagePreviewUrl !== undefined || fileName !== undefined) && (
+      {((imagePreviewUrl !== undefined || fileName !== undefined) && onFileChange) && (
         <PhotoUpload
           text={fileName ? fileName : photoError}
-          onChange={onFileChange}
+          onChange={onFileChangeHandler}
           previewImageUrl={imagePreviewUrl}
-          onImageDelete={onImageDelete}
+          onImageDelete={onFileDeleteHandler}
         />
       )}
     </>
