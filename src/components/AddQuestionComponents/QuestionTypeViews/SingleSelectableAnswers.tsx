@@ -7,6 +7,7 @@ import {
   SelectableAnswerType,
   SelectableQuestionType,
 } from "../../../types/QuizesTypes";
+import { ImageMimeTypesMap } from "../../../utils/Maps";
 
 const SingleSelectableAnswers: FC<AnswersViewProps> = (props) => {
   const [questionData, setQuestionData] = useState<SelectableQuestionType>({
@@ -249,7 +250,7 @@ const SingleSelectableAnswers: FC<AnswersViewProps> = (props) => {
     }
     const mappedAnswerData = answerData.map((answer)=>{
       if (answer.file !== null) {
-        formData.append(`array_answers_image`, answer.file as Blob, answer.id);
+        formData.append(`array_answers_image`, answer.file as Blob, `${answer.id}.${ImageMimeTypesMap[answer.file.type]}`);
       }
       return {
         index: answer.id,
@@ -258,13 +259,13 @@ const SingleSelectableAnswers: FC<AnswersViewProps> = (props) => {
       }
     })
     formData.append("array_answers", JSON.stringify(mappedAnswerData));
-    // console.log(formData.getAll("array_answers_image"));
+    console.log(formData.getAll("array_answers_image"));
     // console.log(formData.getAll("array_answers"));
-    submitRequestFunction(handleResponse, handleError, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
-      body: formData,
-    });
+    // submitRequestFunction(handleResponse, handleError, {
+    //   method: "POST",
+    //   headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+    //   body: formData,
+    // });
   }
 
   // useEffect(() => {
