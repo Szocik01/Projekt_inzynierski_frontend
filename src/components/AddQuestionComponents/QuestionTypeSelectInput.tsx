@@ -5,6 +5,7 @@ import MuiSelectComponent from "../UtilityComponents/MuiSelectComponent";
 import { FC, useCallback, useEffect, useState } from "react";
 import useHttp from "../../hooks/useHttp";
 import { API_CALL_URL_BASE } from "../../utils/Constants";
+import ContentLoading from "../UtilityComponents/ContentLoading";
 
 type QuestionTypeSelectInputProps = {
   onChange: (id: string, typeName?: string) => void;
@@ -45,7 +46,7 @@ const QuestionTypeSelectInput: FC<QuestionTypeSelectInputProps> = (props) => {
       setQuestionTypes(data);
       onChange(data[0].id ? data[0].id : "", data[0].type ? data[0].type : "");
     });
-  }, []);
+  }, [onChange]);
 
   const handleError = useCallback((error: Error) => {
     console.warn(error.message);
@@ -61,6 +62,8 @@ const QuestionTypeSelectInput: FC<QuestionTypeSelectInputProps> = (props) => {
   }, [getTypes, handleResponse, handleError]);
 
   return (
+    <>
+    {isLoading && <ContentLoading coverParent blurOverlay/>}
     <MuiSelectComponent
       value={value}
       placeholder="Wybierz typ pytania"
@@ -75,6 +78,7 @@ const QuestionTypeSelectInput: FC<QuestionTypeSelectInputProps> = (props) => {
       onChange={questionTypeChangeHandler}
       label="Typ pytania"
     />
+    </>
   );
 };
 

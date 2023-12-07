@@ -10,13 +10,14 @@ import { Button } from "@mui/material";
 import { baseButtonStyles } from "../../../GlobalStyles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { mediaUp } from "../../../utils/mediaQueries";
+import { httpErrorStyles } from "../../AuthComponents/AuthGlobalStyles";
 
 const viewContainerStyles = css({
   width: "100%",
   display: "flex",
   flexDirection: "column",
-  alignItems: "center",
   rowGap: "2rem",
+  alignItems: "flex-start",
   [mediaUp("sm")]: {
     flexDirection: "row",
     justifyContent: "center",
@@ -89,6 +90,7 @@ type SelectableAnswersProps = {
   onAnswerFileRemove: (id?: string) => void;
   canSubmit: boolean;
   fileErrors?: { [key: string]: string };
+  httpError: string;
 };
 
 const SelectableAnswers = (props: SelectableAnswersProps) => {
@@ -108,6 +110,7 @@ const SelectableAnswers = (props: SelectableAnswersProps) => {
     onAnswerFileRemove,
     canSubmit,
     fileErrors,
+    httpError
   } = props;
 
   const correctAnswersElements = correctAnswers.map((answer, index) => {
@@ -274,8 +277,9 @@ const SelectableAnswers = (props: SelectableAnswersProps) => {
         </Button>
       </div>
       <Button disabled={!canSubmit} sx={baseButtonStyles} type="submit">
-        Zapisz pytanie
+        Zapisz pytanie i wróć
       </Button>
+      <span css={[httpErrorStyles, {width:"100%", textAlign:"center"}]}>{httpError}</span>
     </form>
   );
 };

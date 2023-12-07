@@ -2,7 +2,7 @@
 
 import SingleColumn from "../components/LayoutComponents/SingleColumn";
 import ContentContainer from "../components/UtilityComponents/ContentContainer";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import QuestionTypeSelectInput from "../components/AddQuestionComponents/QuestionTypeSelectInput";
 import SingleSelectableAnswers from "../components/AddQuestionComponents/QuestionTypeViews/SingleSelectableAnswers";
 import MultipleSelectableAnswers from "../components/AddQuestionComponents/QuestionTypeViews/MultipleSelectableAnswers";
@@ -27,9 +27,9 @@ const AddQuestion = () => {
     `${API_CALL_URL_BASE}/api/routers/http/controllers/question/add_questions`
   );
 
-  function questionTypeChangeHandler(id: string, typeName?: string) {
+  const questionTypeChangeHandler =useCallback((id: string, typeName?: string) => {
     setQuestionType({id:id, typeName: typeName ? typeName : ""});
-  }
+  },[])
 
   let viewToRender = null;
 
@@ -45,7 +45,13 @@ const AddQuestion = () => {
     );
   }
   if (questionType.typeName === "multiple") {
-    viewToRender = <MultipleSelectableAnswers />;
+    viewToRender = <MultipleSelectableAnswers
+    submitRequestFunction={addQuestion}
+    userId={userId}
+    token={token}
+    quizId={quizId ? quizId : ""}
+    typeId={questionType.id}
+    />;
   }
 
   return (

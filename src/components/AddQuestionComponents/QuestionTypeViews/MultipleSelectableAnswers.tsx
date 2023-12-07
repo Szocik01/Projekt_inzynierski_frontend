@@ -1,13 +1,16 @@
 /** @jsxImportSource @emotion/react */
 
-import { FormEvent, useEffect, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 import SelectableAnswers from "./SelectableAnswers";
 import {
+  AnswersViewProps,
   SelectableAnswerType,
   SelectableQuestionType,
 } from "../../../types/QuizesTypes";
+import { ImageMimeTypesMap } from "../../../utils/Maps";
+import { useNavigate } from "react-router-dom";
 
-const MultipleSelectableAnswers = () => {
+const SingleSelectableAnswers: FC<AnswersViewProps> = (props) => {
   const [questionData, setQuestionData] = useState<SelectableQuestionType>({
     id: "",
     userId: "",
@@ -15,13 +18,14 @@ const MultipleSelectableAnswers = () => {
     text: "",
     linkImage: "",
     file: null,
-    questionType: {
-      id: "",
-      name: "",
-    },
   });
   const [answerData, setAnswerData] = useState<SelectableAnswerType[]>([]);
   const [fileErrors, setFileErrors] = useState<{ [key: string]: string }>({});
+  const [httpError, setHttpError] = useState("");
+
+  const { token, userId, submitRequestFunction, quizId, typeId } = props;
+
+  const navigator = useNavigate();
 
   const correctAnswers = answerData.filter((answer) => {
     return answer.answerType;
@@ -73,7 +77,7 @@ const MultipleSelectableAnswers = () => {
     if (questionData.text === "" && questionData.file === null) {
       return false;
     }
-    if (correctAnswers.length !== 1) {
+    if (correctAnswers.length === 0) {
       return false;
     }
     if (wrongAnswers.length === 0) {
@@ -96,10 +100,10 @@ const MultipleSelectableAnswers = () => {
 
   function questionFileChangeHandler(files: FileList) {
     setFileErrors((prevState) => {
-        const newState = { ...prevState };
-        delete newState.question;
-        return newState;
-      });
+      const newState = { ...prevState };
+      delete newState.question;
+      return newState;
+    });
     const file = files[0];
     const validationResult = fileValidationHandler(file);
     if (validationResult !== "") {
@@ -178,19 +182,15 @@ const MultipleSelectableAnswers = () => {
     });
   }
 
-  function addQuestionHandler(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-  }
-
   function removeAnswerHandler(id?: string) {
     if (id === undefined) {
       return;
     }
     setFileErrors((prevState) => {
-        const newState = { ...prevState };
-        delete newState[id];
-        return newState;
-        });
+      const newState = { ...prevState };
+      delete newState[id];
+      return newState;
+    });
     setAnswerData((prevState) => {
       return prevState.filter((answer) => {
         return answer.id !== id;
@@ -208,7 +208,7 @@ const MultipleSelectableAnswers = () => {
   }
 
   function answerDeleteImageHandler(id?: string) {
-    if(id === undefined){
+    if (id === undefined) {
       return;
     }
     setAnswerData((prevState) => {
@@ -224,13 +224,55 @@ const MultipleSelectableAnswers = () => {
     });
   }
 
-  useEffect(() => {
-    console.log(questionData, answerData,fileErrors);
-  }, [questionData, answerData,fileErrors]);
+  function handleResponse(response: Response) {
+    return response.json().then((data) => {
+      if (data.status_code >= 400 && data.status_code <= 599) {
+        throw new Error(data.message);
+      }
+      navigator(`/quiz-questions/${quizId}`);
+    });
+  }
+
+  function handleError(error: Error) {
+    setHttpError(error.message);
+  }
+
+  function addQuestionHandler(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setHttpError("");
+    if (!validateInputsResult) {
+      setHttpError("Podano niepoprawne dane.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("quiz_id", quizId);
+    formData.append("type_id", typeId);
+    formData.append("user_id", userId);
+    formData.append("text", questionData.text);
+    if (questionData.file) {
+      formData.append("image", questionData.file);
+    }
+    const mappedAnswerData = answerData.map((answer)=>{
+      if (answer.file !== null) {
+        formData.append(`array_answers_image[]`, answer.file as Blob, `${answer.id}.${ImageMimeTypesMap[answer.file.type]}`);
+      }
+      return {
+        index: answer.id,
+        text: answer.text,
+        answer_type: +answer.answerType,
+      }
+    })
+    formData.append("array_answers", JSON.stringify(mappedAnswerData));
+    submitRequestFunction(handleResponse, handleError, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      body: formData,
+    });
+  }
 
   return (
     <SelectableAnswers
-      multipleAnswer={false}
+      multipleAnswer={true}
       question={questionData}
       correctAnswers={correctAnswers}
       wrongAnswers={wrongAnswers}
@@ -245,8 +287,9 @@ const MultipleSelectableAnswers = () => {
       onQuestionFileRemove={questionDeleteImageHandler}
       canSubmit={validateInputsResult}
       fileErrors={fileErrors}
+      httpError={httpError}
     />
   );
 };
 
-export default MultipleSelectableAnswers;
+export default SingleSelectableAnswers;

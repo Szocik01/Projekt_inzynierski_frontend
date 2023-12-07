@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { FC, FormEvent, useEffect, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 import SelectableAnswers from "./SelectableAnswers";
 import {
   AnswersViewProps,
@@ -8,6 +8,7 @@ import {
   SelectableQuestionType,
 } from "../../../types/QuizesTypes";
 import { ImageMimeTypesMap } from "../../../utils/Maps";
+import { useNavigate } from "react-router-dom";
 
 const SingleSelectableAnswers: FC<AnswersViewProps> = (props) => {
   const [questionData, setQuestionData] = useState<SelectableQuestionType>({
@@ -23,6 +24,8 @@ const SingleSelectableAnswers: FC<AnswersViewProps> = (props) => {
   const [httpError, setHttpError] = useState("");
 
   const { token, userId, submitRequestFunction, quizId, typeId } = props;
+
+  const navigator = useNavigate();
 
   const correctAnswers = answerData.filter((answer) => {
     return answer.answerType;
@@ -226,6 +229,7 @@ const SingleSelectableAnswers: FC<AnswersViewProps> = (props) => {
       if (data.status_code >= 400 && data.status_code <= 599) {
         throw new Error(data.message);
       }
+      navigator(`/quiz-questions/${quizId}`);
     });
   }
 
@@ -248,29 +252,27 @@ const SingleSelectableAnswers: FC<AnswersViewProps> = (props) => {
     if (questionData.file) {
       formData.append("image", questionData.file);
     }
-    const mappedAnswerData = answerData.map((answer)=>{
+    const mappedAnswerData = answerData.map((answer) => {
       if (answer.file !== null) {
-        formData.append(`array_answers_image`, answer.file as Blob, `${answer.id}.${ImageMimeTypesMap[answer.file.type]}`);
+        formData.append(
+          `array_answers_image[]`,
+          answer.file as Blob,
+          `${answer.id}.${ImageMimeTypesMap[answer.file.type]}`
+        );
       }
       return {
         index: answer.id,
         text: answer.text,
         answer_type: +answer.answerType,
-      }
-    })
+      };
+    });
     formData.append("array_answers", JSON.stringify(mappedAnswerData));
-    console.log(formData.getAll("array_answers_image"));
-    // console.log(formData.getAll("array_answers"));
-    // submitRequestFunction(handleResponse, handleError, {
-    //   method: "POST",
-    //   headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
-    //   body: formData,
-    // });
+    submitRequestFunction(handleResponse, handleError, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      body: formData,
+    });
   }
-
-  // useEffect(() => {
-  //   console.log(questionData, answerData, fileErrors);
-  // }, [questionData, answerData, fileErrors]);
 
   return (
     <SelectableAnswers
@@ -289,6 +291,7 @@ const SingleSelectableAnswers: FC<AnswersViewProps> = (props) => {
       onQuestionFileRemove={questionDeleteImageHandler}
       canSubmit={validateInputsResult}
       fileErrors={fileErrors}
+      httpError={httpError}
     />
   );
 };
