@@ -11,32 +11,29 @@ export type QuizPreviewData = {
 };
 
 export type SelectableQuestionType = {
+    quizId?: string;
     id:string;
-    userId:string;
-    quizId:string;
     text:string;
     linkImage:string;
     file: File | null;
-    questionType?:{
-        id:string;
-        name:string;
-    };
 };
 
 export type SelectableAnswerType = {
     id:string;
-    userId?:string;
-    questionId?:string;
     text?:string;
     linkImage?:string;
     file: File | null;
     answerType:boolean;
 };
 
-export type AnswersViewProps = {
+export type AddAnswersViewProps = {
     token:string;
     userId:string;
     submitRequestFunction: SendRequestFunction;
     quizId:string;
     typeId:string;
+}
+
+export type EditAnswersViewProps = AddAnswersViewProps & {
+    questionId:string;
 }

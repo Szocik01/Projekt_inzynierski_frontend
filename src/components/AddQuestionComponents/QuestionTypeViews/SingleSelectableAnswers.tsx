@@ -1,20 +1,18 @@
 /** @jsxImportSource @emotion/react */
 
 import { FC, FormEvent, useState } from "react";
-import SelectableAnswers from "./SelectableAnswers";
+import SelectableAnswers from "../../QuestionUtilityComponents/SelectableAnswers";
 import {
-  AnswersViewProps,
+  AddAnswersViewProps,
   SelectableAnswerType,
   SelectableQuestionType,
 } from "../../../types/QuizesTypes";
 import { ImageMimeTypesMap } from "../../../utils/Maps";
 import { useNavigate } from "react-router-dom";
 
-const SingleSelectableAnswers: FC<AnswersViewProps> = (props) => {
+const SingleSelectableAnswers: FC<AddAnswersViewProps> = (props) => {
   const [questionData, setQuestionData] = useState<SelectableQuestionType>({
     id: "",
-    userId: "",
-    quizId: "",
     text: "",
     linkImage: "",
     file: null,

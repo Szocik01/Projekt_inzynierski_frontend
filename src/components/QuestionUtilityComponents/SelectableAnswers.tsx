@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from "@emotion/react";
-import InputsCard from "../../UtilityComponents/InputsCard";
+import InputsCard from "../UtilityComponents/InputsCard";
 import {
   SelectableAnswerType,
   SelectableQuestionType,
-} from "../../../types/QuizesTypes";
+} from "../../types/QuizesTypes";
 import { Button } from "@mui/material";
-import { baseButtonStyles } from "../../../GlobalStyles";
+import { baseButtonStyles } from "../../GlobalStyles";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { mediaUp } from "../../../utils/mediaQueries";
-import { httpErrorStyles } from "../../AuthComponents/AuthGlobalStyles";
+import { mediaUp } from "../../utils/mediaQueries";
+import { httpErrorStyles } from "../AuthComponents/AuthGlobalStyles";
 
 const viewContainerStyles = css({
   width: "100%",
