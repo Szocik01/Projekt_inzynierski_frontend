@@ -14,6 +14,7 @@ import { ReduxAppState } from "../storage/redux";
 import { AuthSliceState } from "../storage/authSlice";
 import { mediaUp } from "../utils/mediaQueries";
 import ContentContainer from "../components/UtilityComponents/ContentContainer";
+import { useNavigate } from "react-router-dom";
 
 const descriptionContainerStyles = css({
   color: "white",
@@ -116,11 +117,14 @@ const AddQuiz = () => {
     }
   );
 
+    const navigate = useNavigate();
+
   function handleResponse(response: Response) {
     return response.json().then((data) => {
       if (data.status_code >= 400 && data.status_code <= 599) {
         throw new Error(data.message);
       }
+      navigate("/user-quizes")
     });
   }
 
@@ -238,7 +242,7 @@ const AddQuiz = () => {
               type="submit"
               css={[baseButtonStyles, customButtonStyles]}
             >
-              Stwórz Quiz
+              Stwórz Quiz i wróć
             </Button>
             <span css={httpErrorStyles}>{httpError}</span>
           </div>

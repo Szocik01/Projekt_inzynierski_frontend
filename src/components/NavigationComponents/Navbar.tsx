@@ -189,17 +189,17 @@ const Navbar: FC<NavbarProps> = (props) => {
         >
           Quizy
         </NavLink>
+        {(userId && token) && <NavLink
+          to="/user-quizes"
+          className={({ isActive }) => (isActive ? "active" : "")}
+        >
+          Moje Quizy
+        </NavLink>}
         <NavLink
           to="/contact"
           className={({ isActive }) => (isActive ? "active" : "")}
         >
           Kontakt
-        </NavLink>
-        <NavLink
-          to="/help"
-          className={({ isActive }) => (isActive ? "active" : "")}
-        >
-          Pomoc
         </NavLink>
       </div>
       <div css={navbarSideRightStyles}>
