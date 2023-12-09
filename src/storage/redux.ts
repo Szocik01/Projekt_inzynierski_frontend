@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSliceReducer from "./authSlice";
+import pageEventsReducer from "./pageEventsSlice";
 
 export const store = configureStore({
     reducer: {
       auth: authSliceReducer,
+      pageEvents: pageEventsReducer,
     },
 });
 

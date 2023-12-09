@@ -20,6 +20,7 @@ import deleteSingleCookie from "./utils/DeleteSingleCookie";
 import Quizes from "./pages/Quizes";
 import AddQuestion from "./pages/AddQuestion";
 import EditQuestion from "./pages/EditQuestion";
+import { PageEventsSliceActions } from "./storage/pageEventsSlice";
 
 const App = () => {
   const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
@@ -36,21 +37,26 @@ const App = () => {
 
   const dispatch = useDispatch();
 
-  const handleResponse = useCallback((response: Response) => {
-    return response.json().then((data) => {
-      if (data.status_code >= 400 && data.status_code <= 599) {
-        throw new Error(data.message);
-      }
-      setSingleCookie("token", data.access_token, data.token_expire);
-      setSingleCookie("userId", data.id, data.token_expire);
-      setSingleCookie("rememberMe", "1", data.token_expire);
-      dispatch(authSliceActions.addUserData({
-        token: data.access_token,
-        userId: data.id,
-      }))
-      setLoading(false);
-    });
-  },[dispatch]);
+  const handleResponse = useCallback(
+    (response: Response) => {
+      return response.json().then((data) => {
+        if (data.status_code >= 400 && data.status_code <= 599) {
+          throw new Error(data.message);
+        }
+        setSingleCookie("token", data.access_token, data.token_expire);
+        setSingleCookie("userId", data.id, data.token_expire);
+        setSingleCookie("rememberMe", "1", data.token_expire);
+        dispatch(
+          authSliceActions.addUserData({
+            token: data.access_token,
+            userId: data.id,
+          })
+        );
+        setLoading(false);
+      });
+    },
+    [dispatch]
+  );
 
   const handleError = useCallback((error: Error) => {
     deleteSingleCookie("token");
@@ -58,7 +64,7 @@ const App = () => {
     deleteSingleCookie("rememberMe");
     console.warn(error.message);
     setLoading(false);
-  },[]);
+  }, []);
 
   useLayoutEffect(() => {
     const cookiesArray = document.cookie.split(";");
@@ -93,7 +99,23 @@ const App = () => {
         Authorization: `Bearer ${authData.token}`,
       },
     });
-  }, [dispatch,refreshToken,handleResponse,handleError]);
+  }, [dispatch, refreshToken, handleResponse, handleError]);
+
+  useLayoutEffect(() => {
+    let isScrolled = false;
+    const getIsScrolled = () => document.documentElement.scrollTop > 0;
+
+    const handleScroll = () => {
+      if (isScrolled !== getIsScrolled()) {
+        isScrolled = !isScrolled;
+        dispatch(PageEventsSliceActions.setIsScrolled(isScrolled));
+      }
+    };
+
+    document.addEventListener("scroll", (event: Event) => {
+      handleScroll();
+    });
+  }, [dispatch]);
 
   return (
     <>
@@ -116,16 +138,21 @@ const App = () => {
           },
         }}
       />
-      {isLoading && <ContentLoading blurOverlay={true} customCss={css({zIndex:2000})}/>}
-      <Navigation/>
+      {isLoading && (
+        <ContentLoading blurOverlay={true} customCss={css({ zIndex: 2000 })} />
+      )}
+      <Navigation />
       <Routes>
-        <Route path="/" element={<Main/>}/>
-        <Route path="/add-quiz" element={<AddQuiz/>}/>
-        <Route path="/edit-quiz/:quizId" element={<EditQuiz/>}/>
-        <Route path="/user-quizes" element={<UserQuizes/>}/>
-        <Route path="/quizes" element={<Quizes/>}/>
-        <Route path="/add-question/:quizId" element={<AddQuestion/>}/>
-        <Route path="/edit-question/:quizId/:questionId" element={<EditQuestion/>}/>
+        <Route path="/" element={<Main />} />
+        <Route path="/add-quiz" element={<AddQuiz />} />
+        <Route path="/edit-quiz/:quizId" element={<EditQuiz />} />
+        <Route path="/user-quizes" element={<UserQuizes />} />
+        <Route path="/quizes" element={<Quizes />} />
+        <Route path="/add-question/:quizId" element={<AddQuestion />} />
+        <Route
+          path="/edit-question/:quizId/:questionId"
+          element={<EditQuestion />}
+        />
         {token && userId ? (
           <Route
             path="/register"

@@ -15,14 +15,14 @@ const navbarStyles = css({
   flexWrap: "nowrap",
   alignItems: "center",
   justifyContent: "space-between",
-  padding: "0 2rem",
+  padding: "0 1.5rem",
   transition: "ease-out 0.3s background-position-y",
   background:
-    "linear-gradient(180deg, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.00) 100%) no-repeat",
+    "linear-gradient(180deg, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.00) 100%) no-repeat",
   backgroundSize: "100% 200%",
   backgroundPositionY: "bottom",
   backdropFilter: "blur( 1.5px )",
-  gap: "1rem",
+  gap: "0.8rem",
   a: {
     fontSize: "14px",
     color: "black",
@@ -45,6 +45,10 @@ const navbarStyles = css({
   },
 });
 
+const navbarActiveStyles = css({
+  backgroundPositionY: "top",
+});
+
 const navbarUnfoldedStyles = css({
   backgroundPositionY: "top",
   [mediaUp("md")]: {
@@ -53,7 +57,7 @@ const navbarUnfoldedStyles = css({
 });
 
 const navbarSideLeftStyles = css({
-  flex:"1 1 0",
+  flex: "1 1 0",
   fontSize: "1.6rem",
   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
   flexShrink: 0,
@@ -81,6 +85,7 @@ const navbarCenterStyles = css({
     a: {
       padding: "0 0.75rem",
       position: "relative",
+      transition: "ease-out 0.3s color",
       "&:before": {
         transition: "ease-out 0.3s transform",
         content: '""',
@@ -99,10 +104,16 @@ const navbarCenterStyles = css({
         transformOrigin: "left",
       },
       "&.active": {
-        color: "#00F800",
+        color: "#00F800 !important",
       },
     },
   },
+});
+
+const navbarCenterActiveStyles = css({
+  a:{
+    color: "white !important",
+  }
 });
 
 const menuTogglerStyles = css({
@@ -160,6 +171,7 @@ const navbarSideRightStyles = css({
 
 type NavbarProps = {
   isUnfolded: boolean;
+  isScrolled: boolean;
   onTogglerClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onLogout: () => void;
   token?: string;
@@ -167,16 +179,26 @@ type NavbarProps = {
 };
 
 const Navbar: FC<NavbarProps> = (props) => {
-  const { isUnfolded, onTogglerClick, token, userId, onLogout } = props;
+  const { isUnfolded, onTogglerClick, token, userId, onLogout, isScrolled } =
+    props;
 
   return (
-    <div css={[navbarStyles, isUnfolded && navbarUnfoldedStyles]}>
+    <div
+      css={[
+        navbarStyles,
+        isScrolled && navbarActiveStyles,
+        isUnfolded && navbarUnfoldedStyles,
+      ]}
+    >
       <div
-        css={[navbarSideLeftStyles, isUnfolded && navbarSideLeftUnfoldedStyles]}
+        css={[
+          navbarSideLeftStyles,
+          (isUnfolded || isScrolled) && navbarSideLeftUnfoldedStyles,
+        ]}
       >
         {resolveLastWordColor("Nazwa Strony")}
       </div>
-      <div css={navbarCenterStyles}>
+      <div css={[navbarCenterStyles, (isScrolled || isUnfolded) && navbarCenterActiveStyles]}>
         <NavLink
           to="/"
           className={({ isActive }) => (isActive ? "active" : "")}
@@ -189,12 +211,14 @@ const Navbar: FC<NavbarProps> = (props) => {
         >
           Quizy
         </NavLink>
-        {(userId && token) && <NavLink
-          to="/user-quizes"
-          className={({ isActive }) => (isActive ? "active" : "")}
-        >
-          Moje Quizy
-        </NavLink>}
+        {userId && token && (
+          <NavLink
+            to="/user-quizes"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Moje Quizy
+          </NavLink>
+        )}
         <NavLink
           to="/contact"
           className={({ isActive }) => (isActive ? "active" : "")}

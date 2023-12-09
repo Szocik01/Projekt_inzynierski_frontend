@@ -13,14 +13,14 @@ const sidebarContainerStyles = css({
   padding: "2rem 0 ",
   overflowY: "auto",
   zIndex: 1000,
-  width:"100%",
+  width: "100%",
   height: "calc(100dvh - 5rem)",
   right: 0,
   top: "100%",
   transform: "translateX(100%)",
   transition: "ease-out 0.3s background-position-y,ease-out 0.35s transform",
   background:
-    "linear-gradient(0deg, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.00) 100%) no-repeat",
+    "linear-gradient(0deg, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.00) 100%) no-repeat",
   backgroundSize: "100% 200%",
   backgroundPositionY: "top",
   backdropFilter: "blur( 1.5px )",
@@ -40,9 +40,8 @@ const sidebarContainerStyles = css({
       color: "black",
     },
   },
-  [mediaUp("sm")]:{
-  width: "22rem",
-    
+  [mediaUp("sm")]: {
+    width: "22rem",
   },
   [mediaUp("md")]: {
     display: "none",
@@ -72,25 +71,30 @@ const sidebarContainerStyles = css({
   },
 });
 
+const sidebarContainerActiveStyles = css({
+  backgroundPositionY: "bottom",
+});
+
 const sidebarContainerUnfoldedStyles = css({
   transform: "none",
-  backgroundPositionY: "bottom",
 });
 
 type SidebarProps = {
   isUnfolded: boolean;
+  isScrolled: boolean;
   onLogout: () => void;
   token?: string;
   userId?: string;
 };
 
 const Sidebar: FC<SidebarProps> = (props) => {
-  const { isUnfolded, onLogout, token, userId } = props;
+  const { isUnfolded, onLogout, token, userId, isScrolled } = props;
 
   return (
     <div
       css={[
         sidebarContainerStyles,
+        (isScrolled || isUnfolded) && sidebarContainerActiveStyles,
         isUnfolded && sidebarContainerUnfoldedStyles,
       ]}
     >

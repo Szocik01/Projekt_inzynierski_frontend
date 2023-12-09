@@ -10,6 +10,16 @@ export type QuizPreviewData = {
     questions: number;
 };
 
+export type QuestionPreviewData = {
+    id: string;
+    name: string;
+    user_id: string;
+    description: string;
+    image_path: string;
+    link_image: string;
+    questions: number;
+};
+
 export type SelectableQuestionType = {
     quizId?: string;
     id:string;

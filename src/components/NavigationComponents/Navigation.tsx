@@ -13,6 +13,7 @@ import { ReduxAppState } from "../../storage/redux";
 import { AuthSliceState, authSliceActions } from "../../storage/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ContentLoading from "../UtilityComponents/ContentLoading";
+import { PageEventsSliceState } from "../../storage/pageEventsSlice";
 
 const headerStyles = css({
   position: "fixed",
@@ -20,7 +21,7 @@ const headerStyles = css({
   left: 0,
   top: 0,
   width: "100%",
-  height: "5rem",
+  height: "4.5rem",
 });
 
 const Navigation = () => {
@@ -33,6 +34,12 @@ const Navigation = () => {
   const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
     (state) => {
       return state.auth;
+    }
+  );
+
+  const { isScrolled } = useSelector<ReduxAppState, PageEventsSliceState>(
+    (state) => {
+      return state.pageEvents;
     }
   );
 
@@ -85,6 +92,7 @@ const Navigation = () => {
       <header css={[headerStyles]}>
         <Navbar
           isUnfolded={isUnfolded}
+          isScrolled={isScrolled}
           onTogglerClick={togglerClickHandler}
           userId={userId}
           token={token}
@@ -92,6 +100,7 @@ const Navigation = () => {
         />
         <Sidebar
           isUnfolded={isUnfolded}
+          isScrolled={isScrolled}
           onLogout={logoutHandler}
           userId={userId}
           token={token}
