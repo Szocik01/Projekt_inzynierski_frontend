@@ -28,7 +28,7 @@ const EditQuestion = () => {
 
   const { quizId, questionId } = useParams();
 
-  const [getQuestion, isGetLoading] = useHttp(
+  const [getQuestionType, isGetLoading] = useHttp(
     `${API_CALL_URL_BASE}/api/routers/http/controllers/question/get_type_question`,
     true
   );
@@ -59,7 +59,7 @@ const EditQuestion = () => {
     if (!token) {
       return;
     }
-    getQuestion(handleGetResponse, handleGetError, {
+    getQuestionType(handleGetResponse, handleGetError, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -70,7 +70,7 @@ const EditQuestion = () => {
         id: questionId,
       }),
     });
-  }, [getQuestion, handleGetResponse, handleGetError, token]);
+  }, [getQuestionType, handleGetResponse, handleGetError, token, questionId]);
 
   let viewToRender = null;
 
