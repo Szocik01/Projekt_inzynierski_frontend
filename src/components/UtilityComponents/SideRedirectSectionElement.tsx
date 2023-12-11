@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { css } from "@emotion/react";
 import { baseButtonStyles } from "../../GlobalStyles";
 import { mediaUp } from "../../utils/mediaQueries";
+import { FC } from "react";
 
 const contentContainerCustomStyles = css({
   ".innerContainer": {
@@ -45,17 +46,24 @@ const addMarkStyles = css({
   },
 });
 
-const AddQuizRedirectSection = () => {
+type SideRedirectSectionElementProps = {
+  redirectionLink: string;
+  text: string;
+};
+
+const SideRedirectSectionElement:FC<SideRedirectSectionElementProps> = (props) => {
+
+  const { redirectionLink, text } = props;
+
   return (
     <ContentContainer
       customStyles={contentContainerCustomStyles}
       title="Stwórz quiz"
     >
       <div css={textContainerStyles}>
-        Ten prosty w obsłudze generator, pozwoli utworzyć ci swój własny
-        oryginalny quiz! Kliknij w “+” i zaczynaj zabawę!
+        {text}
       </div>
-      <Link to="/add-quiz" css={{width:"fit-content"}}>
+      <Link to={redirectionLink} css={{width:"fit-content"}}>
         <Button
           type="button"
           sx={[baseButtonStyles, { position: "relative", height: "3rem" }]}
@@ -68,4 +76,4 @@ const AddQuizRedirectSection = () => {
   );
 };
 
-export default AddQuizRedirectSection;
+export default SideRedirectSectionElement;

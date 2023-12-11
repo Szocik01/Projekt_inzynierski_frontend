@@ -12,12 +12,11 @@ export type QuizPreviewData = {
 
 export type QuestionPreviewData = {
     id: string;
-    name: string;
+    text: string;
     user_id: string;
-    description: string;
-    image_path: string;
+    type_id: string;
+    quiz_id: string;
     link_image: string;
-    questions: number;
 };
 
 export type SelectableQuestionType = {
@@ -47,3 +46,19 @@ export type AddAnswersViewProps = {
 export type EditAnswersViewProps = AddAnswersViewProps & {
     questionId:string;
 }
+
+export type PlayQuizQuestionData<T> = {
+    id:string;
+    text:string;
+    link_image:string;
+    quiz_id:string;
+    answers:T[];
+};
+
+export type PlayQuizAnswerData = {
+    id:string;
+    text:string;
+    link_image:string;
+    answer_type:boolean;
+    question_id:string;
+};

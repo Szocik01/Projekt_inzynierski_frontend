@@ -54,7 +54,7 @@ const Quizes = () => {
                 title={quiz.name}
                 content={quiz.description}
                 imageUrl={quiz.link_image}
-                cardRedirectionLink="/"
+                cardRedirectionLink={`/play-quiz/${quiz.id}`}
               />
             );
           })}

@@ -9,10 +9,11 @@ import ContentContainer from "../components/UtilityComponents/ContentContainer";
 import { useSelector } from "react-redux";
 import { ReduxAppState } from "../storage/redux";
 import { AuthSliceState } from "../storage/authSlice";
-import { QuizPreviewData } from "../types/QuizesTypes";
-import AddQuizRedirectSection from "../components/UtilityComponents/AddQuizRedirectSection";
+import { QuestionPreviewData } from "../types/QuizesTypes";
+import SideRedirectSectionElement from "../components/UtilityComponents/SideRedirectSectionElement";
 import { mediaUp } from "../utils/mediaQueries";
-import UserQuizesListingCard from "../components/UserQuizesComponents/UserQuizesListingCard";
+import UserQuestionsListingCard from "../components/UserQuestionsComponents/UserQuestionsListingCard";
+import { useParams } from "react-router-dom";
 
 const noQuestionsStyles = css({
   alignSelf: "center",
@@ -20,10 +21,10 @@ const noQuestionsStyles = css({
 });
 
 const UserQuizQuestions = () => {
-  const [questions, setQuestions] = useState<QuizPreviewData[]>([]);
+  const [questions, setQuestions] = useState<QuestionPreviewData[]>([]);
 
   const [getQuizes, isLoading] = useHttp(
-    `${API_CALL_URL_BASE}/api/routers/http/controllers/quiz/get_quiz`,
+    `${API_CALL_URL_BASE}/api/routers/http/controllers/question/only_questions`,
     true
   );
   const { userId, token } = useSelector<ReduxAppState, AuthSliceState>(
@@ -32,21 +33,22 @@ const UserQuizQuestions = () => {
     }
   );
 
-    function afterHttpDeleteSuccessHandler(quizId: string) {
-        setQuestions((prevValue) => {
-        return prevValue.filter((quiz) => {
-          return quiz.id !== quizId;
-        });
+  const { quizId } = useParams();
+
+  function afterHttpDeleteSuccessHandler(questionId: string) {
+    setQuestions((prevValue) => {
+      return prevValue.filter((question) => {
+        return question.id !== questionId;
       });
-    }
+    });
+  }
 
   const handleResponse = useCallback((response: Response) => {
     return response.json().then((data) => {
       if (data.status_code >= 400 && data.status_code <= 599) {
         throw new Error(data.message);
       }
-      console.log(data);
-    //   setQuestions(data);
+      setQuestions(data);
     });
   }, []);
 
@@ -65,9 +67,9 @@ const UserQuizQuestions = () => {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ user_id: userId }),
+      body: JSON.stringify({ user_id: userId, quiz_id: quizId }),
     });
-  }, [getQuizes, handleResponse, handleError, token, userId]);
+  }, [getQuizes, handleResponse, handleError, token, userId, quizId]);
 
   return (
     <TwoColumns
@@ -83,31 +85,39 @@ const UserQuizQuestions = () => {
       mainColumnCustomCss={css({
         padding: "0.5rem 0.8rem",
       })}
-      sideElement={<AddQuizRedirectSection />}
+      sideElement={
+        <SideRedirectSectionElement
+          redirectionLink={`/add-question/${quizId}`}
+          text="Ten prosty w obsłudze generator, pozwoli ci dodać pytania do twojego quizu! Kliknij w “+” i zaczynaj zabawę!"
+        />
+      }
     >
       <ContentContainer isLoading={isLoading} title="Twoje Quizy">
-        {(questions.length === 0 && !isLoading) && <h4 css={noQuestionsStyles}>Nie dodałeś jeszcze pytań do tego quizu.</h4>} 
-        {(questions.length > 0 && !isLoading) && questions.map((question) => {
-            return (
-                <UserQuizesListingCard
-                key={question.id}
-                  quizId={question.id}
-                  imageUrl={question.link_image}
-                  title={question.name}
-                  content={question.description}
-                  editButtonRedirectionLink={`/edit-quiz/${question.id}`}
-                  cardRedirectionLink="/quizes"
-                  onAfterHttpDeleteSuccess={afterHttpDeleteSuccessHandler}
-                  customStyles={css({
-                    paddingRight: "3.5rem",
-                    [mediaUp("sm")]: {
-                      paddingRight: "4rem",
-                    },
-                  })}
-                />
-            );
-          }
+        {questions.length === 0 && !isLoading && (
+          <h4 css={noQuestionsStyles}>
+            Nie dodałeś jeszcze pytań do tego quizu.
+          </h4>
         )}
+        {questions.length > 0 &&
+          !isLoading &&
+          questions.map((question) => {
+            return (
+              <UserQuestionsListingCard
+                key={question.id}
+                questionId={question.id}
+                imageUrl={question.link_image}
+                title={question.text}
+                editButtonRedirectionLink={`/edit-question/${quizId}/${question.id}`}
+                onAfterHttpDeleteSuccess={afterHttpDeleteSuccessHandler}
+                customStyles={css({
+                  paddingRight: "3.5rem",
+                  [mediaUp("sm")]: {
+                    paddingRight: "4rem",
+                  },
+                })}
+              />
+            );
+          })}
       </ContentContainer>
     </TwoColumns>
   );

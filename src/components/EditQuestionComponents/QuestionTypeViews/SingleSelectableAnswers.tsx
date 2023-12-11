@@ -273,7 +273,7 @@ const SingleSelectableAnswers: FC<EditAnswersViewProps> = (props) => {
       if (data.status_code >= 400 && data.status_code <= 599) {
         throw new Error(data.message);
       }
-      navigator(`/quiz-questions/${quizId}`);
+      navigator(`/user-questions/${quizId}`);
     });
   }
 

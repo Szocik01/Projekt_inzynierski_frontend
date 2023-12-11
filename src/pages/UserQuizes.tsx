@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { ReduxAppState } from "../storage/redux";
 import { AuthSliceState } from "../storage/authSlice";
 import { QuizPreviewData } from "../types/QuizesTypes";
-import AddQuizRedirectSection from "../components/UtilityComponents/AddQuizRedirectSection";
+import SideRedirectSectionElement from "../components/UtilityComponents/SideRedirectSectionElement";
 import { mediaUp } from "../utils/mediaQueries";
 import UserQuizesListingCard from "../components/UserQuizesComponents/UserQuizesListingCard";
 
@@ -32,13 +32,13 @@ const UserQuizes = () => {
     }
   );
 
-    function afterHttpDeleteSuccessHandler(quizId: string) {
-      setQuizes((prevValue) => {
-        return prevValue.filter((quiz) => {
-          return quiz.id !== quizId;
-        });
+  function afterHttpDeleteSuccessHandler(quizId: string) {
+    setQuizes((prevValue) => {
+      return prevValue.filter((quiz) => {
+        return quiz.id !== quizId;
       });
-    }
+    });
+  }
 
   const handleResponse = useCallback((response: Response) => {
     return response.json().then((data) => {
@@ -82,31 +82,40 @@ const UserQuizes = () => {
       mainColumnCustomCss={css({
         padding: "0.5rem 0.8rem",
       })}
-      sideElement={<AddQuizRedirectSection />}
+      sideElement={
+        <SideRedirectSectionElement
+          redirectionLink="/add-quiz"
+          text="Ten prosty w obsłudze generator, pozwoli utworzyć ci swój własny
+      oryginalny quiz! Kliknij w “+” i zaczynaj zabawę!"
+        />
+      }
     >
       <ContentContainer isLoading={isLoading} title="Twoje Quizy">
-        {(quizes.length === 0 && !isLoading) && <h4 css={noQuizesStyles}>Nie dodałeś jeszcze quizów</h4>} 
-        {(quizes.length > 0 && !isLoading) && quizes.map((quiz) => {
-            return (
-                <UserQuizesListingCard
-                key={quiz.id}
-                  quizId={quiz.id}
-                  imageUrl={quiz.link_image}
-                  title={quiz.name}
-                  content={quiz.description}
-                  editButtonRedirectionLink={`/edit-quiz/${quiz.id}`}
-                  cardRedirectionLink="/quizes"
-                  onAfterHttpDeleteSuccess={afterHttpDeleteSuccessHandler}
-                  customStyles={css({
-                    paddingRight: "3.5rem",
-                    [mediaUp("sm")]: {
-                      paddingRight: "4rem",
-                    },
-                  })}
-                />
-            );
-          }
+        {quizes.length === 0 && !isLoading && (
+          <h4 css={noQuizesStyles}>Nie dodałeś jeszcze quizów</h4>
         )}
+        {quizes.length > 0 &&
+          !isLoading &&
+          quizes.map((quiz) => {
+            return (
+              <UserQuizesListingCard
+                key={quiz.id}
+                quizId={quiz.id}
+                imageUrl={quiz.link_image}
+                title={quiz.name}
+                content={quiz.description}
+                editButtonRedirectionLink={`/edit-quiz/${quiz.id}`}
+                cardRedirectionLink={`/user-questions/${quiz.id}`}
+                onAfterHttpDeleteSuccess={afterHttpDeleteSuccessHandler}
+                customStyles={css({
+                  paddingRight: "3.5rem",
+                  [mediaUp("sm")]: {
+                    paddingRight: "4rem",
+                  },
+                })}
+              />
+            );
+          })}
       </ContentContainer>
     </TwoColumns>
   );

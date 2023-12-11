@@ -21,6 +21,8 @@ import Quizes from "./pages/Quizes";
 import AddQuestion from "./pages/AddQuestion";
 import EditQuestion from "./pages/EditQuestion";
 import { PageEventsSliceActions } from "./storage/pageEventsSlice";
+import PlayQuiz from "./pages/PlayQuiz";
+import UserQuizQuestions from "./pages/UserQuizQuestions";
 
 const App = () => {
   const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
@@ -149,10 +151,12 @@ const App = () => {
         <Route path="/user-quizes" element={<UserQuizes />} />
         <Route path="/quizes" element={<Quizes />} />
         <Route path="/add-question/:quizId" element={<AddQuestion />} />
+        <Route path="/play-quiz/:quizId" element={<PlayQuiz/>} />
         <Route
           path="/edit-question/:quizId/:questionId"
           element={<EditQuestion />}
         />
+        <Route path="/user-questions/:quizId" element={<UserQuizQuestions/>}/>
         {token && userId ? (
           <Route
             path="/register"
