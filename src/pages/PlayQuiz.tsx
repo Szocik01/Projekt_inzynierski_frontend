@@ -113,7 +113,7 @@ const PlayQuiz = () => {
   if(questions.length === 0){
     viewToRender = <p css={{width:"100%", textAlign:"center"}}>Brak pytań w quizie</p>
   }
-  else if (!isSolvingQuiz && activeQuestion === 0) {
+  else if (!isSolvingQuiz && activeQuestion === 0 && userAnswersArrayRef.current.length === 0) {
     viewToRender = (
       <InvitationPage
         onBeginQuiz={() => setSolvingQuiz(true)}
@@ -154,7 +154,11 @@ const PlayQuiz = () => {
         quizLength={questions.length}
         questionNumber={activeQuestion + 1}
         getResult={getQuestionResultHandler}
-        onChangeQuestion={changeQuestionHandler}
+        onChangeQuestion={
+          activeQuestion !== questions.length - 1
+            ? changeQuestionHandler
+            : endQuizHandler
+        }
         answers={questions[activeQuestion].answers}
       />
     );
