@@ -52,6 +52,10 @@ export type PlayQuizQuestionData<T> = {
     text:string;
     link_image:string;
     quiz_id:string;
+    type:{
+        type:string;
+        id:string;
+    }
     answers:T[];
 };
 

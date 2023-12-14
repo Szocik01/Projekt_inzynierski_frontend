@@ -12,6 +12,9 @@ import ContentContainer from "../components/UtilityComponents/ContentContainer";
 import SingleColumn from "../components/LayoutComponents/SingleColumn";
 import { PlayQuizAnswerData, PlayQuizQuestionData } from "../types/QuizesTypes";
 import InvitationPage from "../components/PlayQuizComponents/InvitationPage";
+import SingleAnswer from "../components/PlayQuizComponents/GameViews/SingleAnswer";
+import MultipleAnswer from "../components/PlayQuizComponents/GameViews/MultipleAnswer";
+import EndingPage from "../components/PlayQuizComponents/EndingPage";
 
 const PlayQuiz = () => {
   const [isSolvingQuiz, setSolvingQuiz] = useState(false);
@@ -32,7 +35,7 @@ const PlayQuiz = () => {
   >([]);
 
   const userAnswersArrayRef = useRef<
-    { userAnswers: { answerId: string; answerType: boolean }[] }[]
+    { userAnswers: { isAnsweredCorrectly: boolean } }[]
   >([]);
 
   const [getQuiz, isGetLoading] = useHttp(
@@ -47,6 +50,28 @@ const PlayQuiz = () => {
   );
 
   const { quizId } = useParams();
+
+  function getQuestionResultHandler(isAnsweredCorrectly: boolean) {
+    userAnswersArrayRef.current.push({ userAnswers: { isAnsweredCorrectly } });
+  }
+
+  function changeQuestionHandler() {
+    setActiveQuestion((prevState) => prevState + 1);
+  }
+
+  function endQuizHandler() {
+    setSolvingQuiz(false);
+  }
+
+  function calculateScore() {
+    let score = 0;
+    userAnswersArrayRef.current.forEach((answer) => {
+      if (answer.userAnswers.isAnsweredCorrectly) {
+        score++;
+      }
+    });
+    return score;
+  }
 
   const handleResponse = useCallback((response: Response) => {
     return response.json().then((data) => {
@@ -97,13 +122,51 @@ const PlayQuiz = () => {
       />
     );
   } else if (!isSolvingQuiz && activeQuestion === questions.length - 1) {
-    viewToRender = null; // strona zakończenia quizu
+    viewToRender = (
+      <EndingPage
+        score={calculateScore()}
+        totalQuestions={questions.length}
+        quizName={quizData.name}
+      />
+    );
+  } else if (questions[0].type.type === "single") {
+    viewToRender = (
+      <SingleAnswer
+        question={questions[activeQuestion].text}
+        questionLinkImage={questions[activeQuestion].link_image}
+        quizLength={questions.length}
+        questionNumber={activeQuestion + 1}
+        getResult={getQuestionResultHandler}
+        onChangeQuestion={
+          activeQuestion !== questions.length - 1
+            ? changeQuestionHandler
+            : endQuizHandler
+        }
+        answers={questions[activeQuestion].answers}
+      />
+    );
+  } else if (questions[0].type.type === "multiple") {
+    viewToRender = (
+      <MultipleAnswer
+        question={questions[activeQuestion].text}
+        questionLinkImage={questions[activeQuestion].link_image}
+        quizLength={questions.length}
+        questionNumber={activeQuestion + 1}
+        getResult={getQuestionResultHandler}
+        onChangeQuestion={changeQuestionHandler}
+        answers={questions[activeQuestion].answers}
+      />
+    );
   }
 
   return (
     <SingleColumn>
       <ContentContainer
-        title="Rozegraj Quiz"
+        title={
+          activeQuestion !== questions.length - 1
+            ? "Rozegraj Quiz"
+            : "Podsumowanie"
+        }
         isLoading={isGetLoading}
       >
         {viewToRender}
