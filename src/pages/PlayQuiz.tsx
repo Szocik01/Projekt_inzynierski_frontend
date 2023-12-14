@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 
-import { css } from "@emotion/react";
 import useHttp from "../hooks/useHttp";
 import { API_CALL_URL_BASE } from "../utils/Constants";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -43,7 +42,7 @@ const PlayQuiz = () => {
     true
   );
 
-  const { userId, token } = useSelector<ReduxAppState, AuthSliceState>(
+  const { token } = useSelector<ReduxAppState, AuthSliceState>(
     (state) => {
       return state.auth;
     }
@@ -112,7 +111,10 @@ const PlayQuiz = () => {
 
   let viewToRender = null;
 
-  if (!isSolvingQuiz && activeQuestion === 0) {
+  if(questions.length === 0){
+    viewToRender = <p css={{width:"100%", textAlign:"center"}}>Brak pytań w quizie</p>
+  }
+  else if (!isSolvingQuiz && activeQuestion === 0) {
     viewToRender = (
       <InvitationPage
         onBeginQuiz={() => setSolvingQuiz(true)}

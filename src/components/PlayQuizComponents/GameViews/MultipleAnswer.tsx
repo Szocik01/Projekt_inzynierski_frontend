@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from "@emotion/react";
-import { Button, FormControl, FormControlLabel, Checkbox } from "@mui/material";
+import { Button, FormControl, Checkbox } from "@mui/material";
 import { FC, useState } from "react";
 import { baseButtonStyles } from "../../../GlobalStyles";
 import { mediaUp } from "../../../utils/mediaQueries";
@@ -181,7 +181,7 @@ const MultipleAnswer: FC<QuestionPageProps> = (props) => {
                   <img
                     css={answerImageStyles}
                     src={answer.link_image}
-                    alt="answer-image"
+                    alt="answer"
                   />
                 )}
               </div>

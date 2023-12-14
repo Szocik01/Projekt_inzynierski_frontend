@@ -4,7 +4,6 @@ import { css } from "@emotion/react";
 import {
   Button,
   FormControl,
-  FormControlLabel,
   Radio,
   RadioGroup,
 } from "@mui/material";
@@ -161,7 +160,7 @@ const SingleAnswer: FC<QuestionPageProps> = (props) => {
                     <img
                       css={answerImageStyles}
                       src={answer.link_image}
-                      alt="answer-image"
+                      alt="answer"
                     />
                   )}
                 </div>
