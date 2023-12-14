@@ -46,7 +46,7 @@ const selectedStyles = css({
 });
 
 const correctStyles = css({
-  border: "2px solid lightgreen",
+  border: "2px solid #03C03C",
 });
 
 const wrongStyles = css({
