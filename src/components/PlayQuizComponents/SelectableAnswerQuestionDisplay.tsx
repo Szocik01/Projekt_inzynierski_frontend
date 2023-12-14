@@ -99,7 +99,7 @@ const SelectableAnswerQuestionDisplay: FC<
         </span>
       </div>
       <div css={questionContentContainerStyles}>
-        {question && <div css={questionContentStyles}>{question}</div>}
+        {question && <div css={questionContentStyles}>Pytanie {questionNumber}: {question}</div>}
         {linkImage && (
           <img css={questionImageStyles} src={linkImage} alt="question" />
         )}
