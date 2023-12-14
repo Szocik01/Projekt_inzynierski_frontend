@@ -77,7 +77,6 @@ const PlayQuiz = () => {
       if (data.status_code >= 400 && data.status_code <= 599) {
         throw new Error(data.message);
       }
-      console.log(data);
       setQuizData({
         name: data.name,
         description: data.description,
