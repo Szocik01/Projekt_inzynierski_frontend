@@ -146,16 +146,16 @@ const App = () => {
       <Navigation />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/add-quiz" element={<AddQuiz />} />
-        <Route path="/edit-quiz/:quizId" element={<EditQuiz />} />
-        <Route path="/user-quizes" element={<UserQuizes />} />
+        {token && userId && <Route path="/add-quiz" element={<AddQuiz />} />}
+        {token && userId && <Route path="/edit-quiz/:quizId" element={<EditQuiz />} />}
+        {token && userId && <Route path="/user-quizes" element={<UserQuizes />} />}
         <Route path="/quizes" element={<Quizes />} />
-        <Route path="/add-question/:quizId" element={<AddQuestion />} />
+        {token && userId && <Route path="/add-question/:quizId" element={<AddQuestion />} />}
         <Route path="/play-quiz/:quizId" element={<PlayQuiz/>} />
-        <Route
+        {token && userId && <Route
           path="/edit-question/:quizId/:questionId"
           element={<EditQuestion />}
-        />
+        />}
         <Route path="/user-questions/:quizId" element={<UserQuizQuestions/>}/>
         {token && userId ? (
           <Route
