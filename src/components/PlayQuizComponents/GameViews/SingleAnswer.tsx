@@ -74,6 +74,7 @@ const answerImageStyles = css({
 
 const questionTextStyles = css({
   fontSize: "0.9rem",
+  wordBreak: "break-word",
 
   [mediaUp("sm")]: {
     fontSize: "1.2rem",
@@ -141,7 +142,7 @@ const SingleAnswer: FC<QuestionPageProps> = (props) => {
         >
           {answers.map((answer) => {
             return (
-              <div
+              <label
                 key={answer.id}
                 css={[
                   answerStyles,
@@ -153,7 +154,7 @@ const SingleAnswer: FC<QuestionPageProps> = (props) => {
                     wrongStyles,
                 ]}
               >
-                <Radio value={answer.id} />
+                <Radio value={answer.id} disabled={isQuestionSaved}/>
                 <div css={answerDataContainerStyles}>
                   {answer.text && <p css={questionTextStyles}>{answer.text}</p>}
                   {answer.link_image && (
@@ -164,13 +165,14 @@ const SingleAnswer: FC<QuestionPageProps> = (props) => {
                     />
                   )}
                 </div>
-              </div>
+              </label>
             );
           })}
         </RadioGroup>
       </FormControl>
       <Button
         sx={[baseButtonStyles, { width: "fit-content", alignSelf: "center" }]}
+        disabled={!selectedAnswerId}
         onClick={
           isQuestionSaved ? redirectToNextQuestionHandler : saveQuestionHandler
         }

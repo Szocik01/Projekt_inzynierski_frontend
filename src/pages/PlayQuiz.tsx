@@ -130,7 +130,7 @@ const PlayQuiz = () => {
         quizName={quizData.name}
       />
     );
-  } else if (questions[0].type.type === "single") {
+  } else if (questions[activeQuestion].type.type === "single") {
     viewToRender = (
       <SingleAnswer
         question={questions[activeQuestion].text}
@@ -146,7 +146,7 @@ const PlayQuiz = () => {
         answers={questions[activeQuestion].answers}
       />
     );
-  } else if (questions[0].type.type === "multiple") {
+  } else if (questions[activeQuestion].type.type === "multiple") {
     viewToRender = (
       <MultipleAnswer
         question={questions[activeQuestion].text}

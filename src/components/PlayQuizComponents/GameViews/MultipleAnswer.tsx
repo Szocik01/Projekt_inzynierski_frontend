@@ -69,6 +69,7 @@ const answerImageStyles = css({
 
 const questionTextStyles = css({
   fontSize: "0.9rem",
+  wordBreak: "break-word",
 
   [mediaUp("sm")]: {
     fontSize: "1.2rem",
@@ -160,7 +161,7 @@ const MultipleAnswer: FC<QuestionPageProps> = (props) => {
         {answers.map((answer) => {
           const isSelected = selectedAnswerIdArray.includes(answer.id);
           return (
-            <div
+            <label
               key={answer.id}
               css={[
                 answerStyles,
@@ -172,7 +173,7 @@ const MultipleAnswer: FC<QuestionPageProps> = (props) => {
                   wrongStyles,
               ]}
             >
-              <Checkbox onChange={selectAnswerHandler} value={answer.id} />
+              <Checkbox onChange={selectAnswerHandler} value={answer.id} disabled={isQuestionSaved}/>
               <div css={answerDataContainerStyles}>
                 {answer.text && (
                   <p css={questionTextStyles}>{answer.text}</p>
@@ -185,12 +186,13 @@ const MultipleAnswer: FC<QuestionPageProps> = (props) => {
                   />
                 )}
               </div>
-            </div>
+            </label>
           );
         })}
       </FormControl>
       <Button
         sx={[baseButtonStyles, { width: "fit-content", alignSelf: "center" }]}
+        disabled={selectedAnswerIdArray.length === 0}
         onClick={
           isQuestionSaved ? redirectToNextQuestionHandler : saveQuestionHandler
         }
