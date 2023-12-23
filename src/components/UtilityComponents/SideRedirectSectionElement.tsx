@@ -49,16 +49,17 @@ const addMarkStyles = css({
 type SideRedirectSectionElementProps = {
   redirectionLink: string;
   text: string;
+  title: string;
 };
 
 const SideRedirectSectionElement:FC<SideRedirectSectionElementProps> = (props) => {
 
-  const { redirectionLink, text } = props;
+  const { redirectionLink, text, title } = props;
 
   return (
     <ContentContainer
       customStyles={contentContainerCustomStyles}
-      title="Stwórz quiz"
+      title={title}
     >
       <div css={textContainerStyles}>
         {text}

@@ -84,6 +84,7 @@ const UserQuizes = () => {
       })}
       sideElement={
         <SideRedirectSectionElement
+          title="Stwórz Quiz"
           redirectionLink="/add-quiz"
           text="Ten prosty w obsłudze generator, pozwoli utworzyć ci swój własny
       oryginalny quiz! Kliknij w “+” i zaczynaj zabawę!"

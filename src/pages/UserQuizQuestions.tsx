@@ -87,6 +87,7 @@ const UserQuizQuestions = () => {
       })}
       sideElement={
         <SideRedirectSectionElement
+          title={"Dodaj pytanie"}
           redirectionLink={`/add-question/${quizId}`}
           text="Ten prosty w obsłudze generator, pozwoli ci dodać pytania do twojego quizu! Kliknij w “+” i zaczynaj zabawę!"
         />
