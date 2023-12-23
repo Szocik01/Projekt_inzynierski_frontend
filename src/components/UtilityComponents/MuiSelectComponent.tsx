@@ -2,6 +2,7 @@
 
 import {
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -16,13 +17,15 @@ type MuiSelectComponentProps = {
   selectValues: { label: string; value: string }[];
   unserializedStyles?: any;
   placeholder?: string;
+  cssClass?: string;
+  enableBottomHelperText?: boolean;
 };
 
 const MuiSelectComponent: FC<MuiSelectComponentProps> = (props) => {
-  const { label, value, onChange, selectValues, unserializedStyles, placeholder } = props;
+  const { label, value, onChange, selectValues, unserializedStyles, placeholder,cssClass, enableBottomHelperText } = props;
 
   return (
-    <FormControl fullWidth sx={unserializedStyles}>
+    <FormControl fullWidth sx={unserializedStyles} className={cssClass}>
       {label && <InputLabel id="select-label">{label}</InputLabel>}
       <Select
         MenuProps={{disableScrollLock: true}}
@@ -36,6 +39,7 @@ const MuiSelectComponent: FC<MuiSelectComponentProps> = (props) => {
           return <MenuItem key={index} value={value.value}>{value.label}</MenuItem>;
         })}
       </Select>
+      {enableBottomHelperText &&<FormHelperText>{" "}</FormHelperText>}
     </FormControl>
   );
 };

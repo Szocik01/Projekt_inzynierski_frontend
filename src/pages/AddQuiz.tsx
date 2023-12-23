@@ -50,12 +50,23 @@ const addQuizFormStyles = css({
       backgroundColor: "#FFFFFFcc",
     },
   },
+  ".text-field-1": {
+    order: 0,
+  },
+  ".text-field-2": {
+    order: 2,
+  },
+  ".select-field": {
+    order: 1,
+  },
   ".multiline-field": {
+    order: 3,
     ".MuiInputBase-root": {
       backgroundColor: "#FFFFFFcc",
     },
   },
   ".drop-zone": {
+    order: 4,
     label: {
       backgroundColor: "#FFFFFFcc",
     },
@@ -64,11 +75,21 @@ const addQuizFormStyles = css({
     display: "grid",
     gridTemplateColumns: "3fr 2fr",
     gridTemplateAreas: `
-    "inlineinputssection imagesection"
+    "inlineinputs1section imagesection"
+    "selectinputssection imagesection"
+    "inlineinputs2section imagesection"
+    "emptysection descriptionsection"
+    "emptysection descriptionsection"
     "buttonsection descriptionsection"
   `,
-    ".text-field": {
-      gridArea: "inlineinputssection",
+    ".text-field1": {
+      gridArea: "inlineinputs1section",
+    },
+    ".text-field2": {
+      gridArea: "inlineinputs2section",
+    },
+    ".select-field": {
+      gridArea: "selectinputssection",
     },
     ".multiline-field": {
       gridArea: "descriptionsection",
@@ -92,6 +113,7 @@ const httpErrorStyles = css({
 });
 
 const buttonGridContainerStyles = css({
+  order: 5,
   gridArea: "buttonsection",
   display: "flex",
   flexDirection: "column",
@@ -106,6 +128,8 @@ const AddQuiz = () => {
   const [description, setDesctiption] = useState("");
   const [photoError, setPhotoError] = useState("");
   const [httpError, setHttpError] = useState("");
+  const [questionAmount, setQuestionAmount] = useState("");
+  const [questionAmountType, setQuestionAmountType] = useState("all");
 
   const [addQuiz, isLoading] = useHttp(
     `${API_CALL_URL_BASE}/api/routers/http/controllers/quiz/add_quiz`
@@ -117,14 +141,14 @@ const AddQuiz = () => {
     }
   );
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   function handleResponse(response: Response) {
     return response.json().then((data) => {
       if (data.status_code >= 400 && data.status_code <= 599) {
         throw new Error(data.message);
       }
-      navigate("/user-quizes")
+      navigate("/user-quizes");
     });
   }
 
@@ -139,6 +163,12 @@ const AddQuiz = () => {
     formData.append("name", title);
     formData.append("description", description);
     formData.append("user_id", userId);
+    formData.append(
+      "quantity",
+      questionAmountType === "all" || questionAmount === "0"
+        ? "0"
+        : questionAmount
+    );
     if (file !== null) {
       formData.append("image", file as Blob);
     }
@@ -183,8 +213,18 @@ const AddQuiz = () => {
     setTitle(text);
   }
 
-  function descriptionChangeHansler(text: string) {
+  function descriptionChangeHandler(text: string) {
     setDesctiption(text);
+  }
+
+  function questionAmountSelectFieldChangeHandler(value: string) {
+    setQuestionAmountType(value);
+  }
+
+  function questionAmountChangeHandler(text: string) {
+    setQuestionAmount((prevValue)=>{
+      return isNaN(+text) ? prevValue : text;
+    });
   }
 
   function validateTitle(): string {
@@ -197,6 +237,16 @@ const AddQuiz = () => {
   function validateDescription(): string {
     if (description.trim().length <= 40 || description.trim().length >= 400) {
       return "Niepoprawna długość opisu quizu";
+    }
+    return "";
+  }
+
+  function validateQuestionAmount(): string {
+    if (questionAmountType==="chosen" && questionAmount.trim().length === 0) {
+      return "Proszę wprowadzić ilość pytań";
+    }
+    if (isNaN(+questionAmount)) {
+      return "Ilość pytań musi być liczbą";
     }
     return "";
   }
@@ -215,30 +265,45 @@ const AddQuiz = () => {
         </span>
       </div>
       <ContentContainer title="Stwórz Quiz" isLoading={isLoading}>
-        <form
-          css={addQuizFormStyles}
-          onSubmit={addQuizHandler}
-        >
+        <form css={addQuizFormStyles} onSubmit={addQuizHandler}>
           <InputsCard
-            textFieldValue={title}
+            textField1Value={title}
+            textField2Value={
+              questionAmountType === "chosen" ? questionAmount : undefined
+            }
             multilineFieldValue={description}
             fileName={file ? file.name : ""}
             imagePreviewUrl={file ? URL.createObjectURL(file) : ""}
-            onTextFieldChange={titleChangeHandler}
-            onMultilineFieldChange={descriptionChangeHansler}
+            onTextField1Change={titleChangeHandler}
+            onTextField2Change={questionAmountChangeHandler}
+            onMultilineFieldChange={descriptionChangeHandler}
             onFileChange={fileChangeHandler}
             fieldsLabel={{
-              textFieldLabel: "Tytuł quizu",
+              textField1Label: "Tytuł quizu",
+              textField2Label: "Ilość pytań",
               multilineFieldLabel: "Opis Quizu",
             }}
-            textFieldError={validateTitle()}
+            textField1Error={validateTitle()}
+            textField2Error={validateQuestionAmount()}
             multilineFieldError={validateDescription()}
             photoError={photoError}
             onImageDelete={imageDeleteHandler}
+            selectFieldValues={[
+              { value: "all", label: "Wszystkie pytania" },
+              { value: "chosen", label: "Wybrana ilość pytań" },
+            ]}
+            selectFieldValue={questionAmountType}
+            selectFieldLabel={"Ilość pytań"}
+            selectFieldPlaceholder={"Wybierz ilość pytań"}
+            onSelectFieldChange={questionAmountSelectFieldChangeHandler}
           />
           <div css={buttonGridContainerStyles}>
             <Button
-              disabled={!!validateTitle() || !!validateDescription()}
+              disabled={
+                !!validateTitle() ||
+                !!validateDescription() ||
+                !!validateQuestionAmount()
+              }
               type="submit"
               css={[baseButtonStyles, customButtonStyles]}
             >
@@ -247,7 +312,7 @@ const AddQuiz = () => {
             <span css={httpErrorStyles}>{httpError}</span>
           </div>
         </form>
-        </ContentContainer>
+      </ContentContainer>
     </SingleColumn>
   );
 };

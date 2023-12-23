@@ -144,16 +144,16 @@ const SelectableAnswers = (props: SelectableAnswersProps) => {
         <InputsCard
           cardId={answer.id}
           fieldsLabel={{
-            textFieldLabel: multipleAnswer
+            textField1Label: multipleAnswer
               ? `Poprawna odpowiedź ${index + 1}`
               : "Poprawna odpowiedź",
           }}
-          textFieldValue={answer.text}
+          textField1Value={answer.text}
           imagePreviewUrl={
             answer.file ? URL.createObjectURL(answer.file) : answer.linkImage
           }
           photoError={fileErrors && fileErrors[answer.id]}
-          onTextFieldChange={(text, cardId) => {
+          onTextField1Change={(text, cardId) => {
             onAnswerTextChange(text, cardId);
           }}
           onFileChange={(files, cardId) => {
@@ -197,13 +197,13 @@ const SelectableAnswers = (props: SelectableAnswersProps) => {
         )}
         <InputsCard
           cardId={answer.id}
-          textFieldValue={answer.text}
-          fieldsLabel={{ textFieldLabel: `Błędna odpowiedź ${index + 1}` }}
+          textField1Value={answer.text}
+          fieldsLabel={{ textField1Label: `Błędna odpowiedź ${index + 1}` }}
           imagePreviewUrl={
             answer.file ? URL.createObjectURL(answer.file) : answer.linkImage
           }
           photoError={fileErrors && fileErrors[answer.id]}
-          onTextFieldChange={(text, cardId) => {
+          onTextField1Change={(text, cardId) => {
             onAnswerTextChange(text, cardId);
           }}
           onFileChange={(files, cardId) => {
@@ -230,15 +230,15 @@ const SelectableAnswers = (props: SelectableAnswersProps) => {
       <div css={topQuestionContainerStyles}>
         <div css={questionContainerStyles}>
           <InputsCard
-            textFieldValue={question.text}
-            fieldsLabel={{ textFieldLabel: "Treść pytania" }}
+            textField1Value={question.text}
+            fieldsLabel={{ textField1Label: "Treść pytania" }}
             imagePreviewUrl={
               question.file
                 ? URL.createObjectURL(question.file)
                 : question.linkImage
             }
             photoError={fileErrors && fileErrors.question}
-            onTextFieldChange={onQuestionTextChange}
+            onTextField1Change={onQuestionTextChange}
             onFileChange={onQuestionImageChange}
             onImageDelete={onQuestionFileRemove}
           />

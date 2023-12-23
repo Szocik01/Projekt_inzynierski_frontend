@@ -1,24 +1,33 @@
 /** @jsxImportSource @emotion/react */
 
-import { TextField } from "@mui/material";
+import { SelectChangeEvent, TextField } from "@mui/material";
 import { FocusEvent, ChangeEvent, FC, useState } from "react";
 import PhotoUpload from "./PhotoUpload";
-
+import MuiSelectComponent from "./MuiSelectComponent";
 
 type QuizDataCardProps = {
   cardId?: string;
   fileName?: string;
   imagePreviewUrl?: string;
-  textFieldValue?: string;
+  textField1Value?: string;
+  textField2Value?: string;
+  selectFieldValue?: string;
   multilineFieldValue?: string;
+  selectFieldPlaceholder?: string;
+  selectFieldLabel?: string;
+  selectFieldValues?: { value: string; label: string }[];
+  onSelectFieldChange?: (value: string) => void;
   fieldsLabel?: {
-    textFieldLabel?: string;
+    textField1Label?: string;
+    textField2Label?: string;
     multilineFieldLabel?: string;
   };
-  onTextFieldChange?: (text: string, cardId?: string) => void;
+  onTextField1Change?: (text: string, cardId?: string) => void;
+  onTextField2Change?: (text: string, cardId?: string) => void;
   onMultilineFieldChange?: (text: string, cardId?: string) => void;
   onFileChange?: (files: FileList, cardId?: string) => void;
-  textFieldError?: string;
+  textField1Error?: string;
+  textField2Error?: string;
   multilineFieldError?: string;
   photoError?: string;
   onImageDelete?: (cardId?: string) => void;
@@ -26,23 +35,32 @@ type QuizDataCardProps = {
 
 const QuizDataCard: FC<QuizDataCardProps> = (props) => {
   const [canDisplayValueError, setCanDisplayValueError] = useState({
-    textField: false,
+    textField1: false,
+    textField2: false,
     multilineField: false,
   });
   const {
     cardId,
     imagePreviewUrl,
     fileName,
-    textFieldValue,
+    textField1Value,
+    textField2Value,
     multilineFieldValue,
     fieldsLabel,
-    onTextFieldChange,
+    onTextField1Change,
+    onTextField2Change,
     onMultilineFieldChange,
     onFileChange,
-    textFieldError,
+    textField1Error,
+    textField2Error,
     multilineFieldError,
     photoError,
     onImageDelete,
+    selectFieldValue,
+    selectFieldPlaceholder,
+    selectFieldValues,
+    onSelectFieldChange,
+    selectFieldLabel
   } = props;
 
   function unsetErrorVisibilityHandler(event: FocusEvent<HTMLInputElement>) {
@@ -56,52 +74,95 @@ const QuizDataCard: FC<QuizDataCardProps> = (props) => {
     });
   }
 
-  function textFieldChangeHandler(event: ChangeEvent<HTMLInputElement>) {
-    if(onTextFieldChange){
-      onTextFieldChange(event.target.value, cardId);
+  function textField1ChangeHandler(event: ChangeEvent<HTMLInputElement>) {
+    if (onTextField1Change) {
+      onTextField1Change(event.target.value, cardId);
+    }
+  }
+
+  function textField2ChangeHandler(event: ChangeEvent<HTMLInputElement>) {
+    if (onTextField2Change) {
+      onTextField2Change(event.target.value.trim(), cardId);
+    }
+  }
+
+  function selectFieldChangeHandler(event: SelectChangeEvent<string>) {
+    if (onSelectFieldChange) {
+      onSelectFieldChange(event.target.value);
     }
   }
 
   function multilineFieldChangeHandler(
     event: ChangeEvent<HTMLTextAreaElement>
   ) {
-    if(onMultilineFieldChange){
+    if (onMultilineFieldChange) {
       onMultilineFieldChange(event.target.value, cardId);
     }
   }
 
   function onFileChangeHandler(files: FileList) {
-    if(onFileChange){
+    if (onFileChange) {
       onFileChange(files, cardId);
     }
   }
 
   function onFileDeleteHandler() {
-    if(onImageDelete){
+    if (onImageDelete) {
       onImageDelete(cardId);
     }
   }
 
   return (
     <>
-      {textFieldValue !== undefined && (
+      {textField1Value !== undefined && (
         <TextField
           fullWidth
-          label={fieldsLabel?.textFieldLabel}
-          value={textFieldValue}
-          onChange={textFieldChangeHandler}
-          error={!!textFieldError && canDisplayValueError.textField}
+          label={fieldsLabel?.textField1Label}
+          value={textField1Value}
+          onChange={textField1ChangeHandler}
+          error={!!textField1Error && canDisplayValueError.textField1}
           helperText={
-            canDisplayValueError.textField && textFieldError
-              ? textFieldError
+            canDisplayValueError.textField1 && textField1Error
+              ? textField1Error
               : " "
           }
           onFocus={unsetErrorVisibilityHandler}
           onBlur={setErrorVisibilityHandler}
-          name={"textField"}
-          className="text-field"
+          name={"textField1"}
+          className="text-field text-field-1"
         />
       )}
+      {textField2Value !== undefined && (
+        <TextField
+          fullWidth
+          label={fieldsLabel?.textField2Label}
+          value={textField2Value}
+          onChange={textField2ChangeHandler}
+          error={!!textField2Error && canDisplayValueError.textField2}
+          helperText={
+            canDisplayValueError.textField2 && textField2Error
+              ? textField2Error
+              : " "
+          }
+          onFocus={unsetErrorVisibilityHandler}
+          onBlur={setErrorVisibilityHandler}
+          name={"textField2"}
+          className="text-field text-field-2"
+        />
+      )}
+      {selectFieldValues !== undefined &&
+        selectFieldValues.length !== 0 &&
+        selectFieldValue !== undefined && (
+          <MuiSelectComponent
+            value={selectFieldValue}
+            placeholder={selectFieldPlaceholder}
+            selectValues={selectFieldValues}
+            onChange={selectFieldChangeHandler}
+            label={selectFieldLabel}
+            cssClass="select-field"
+            enableBottomHelperText={true}
+          />
+        )}
       {multilineFieldValue !== undefined && (
         <TextField
           fullWidth
@@ -122,14 +183,15 @@ const QuizDataCard: FC<QuizDataCardProps> = (props) => {
           className="multiline-field"
         />
       )}
-      {((imagePreviewUrl !== undefined || fileName !== undefined) && onFileChange) && (
-        <PhotoUpload
-          text={fileName ? fileName : photoError}
-          onChange={onFileChangeHandler}
-          previewImageUrl={imagePreviewUrl}
-          onImageDelete={onFileDeleteHandler}
-        />
-      )}
+      {(imagePreviewUrl !== undefined || fileName !== undefined) &&
+        onFileChange && (
+          <PhotoUpload
+            text={fileName ? fileName : photoError}
+            onChange={onFileChangeHandler}
+            previewImageUrl={imagePreviewUrl}
+            onImageDelete={onFileDeleteHandler}
+          />
+        )}
     </>
   );
 };
