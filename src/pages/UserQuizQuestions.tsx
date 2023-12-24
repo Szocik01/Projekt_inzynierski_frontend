@@ -14,6 +14,7 @@ import SideRedirectSectionElement from "../components/UtilityComponents/SideRedi
 import { mediaUp } from "../utils/mediaQueries";
 import UserQuestionsListingCard from "../components/UserQuestionsComponents/UserQuestionsListingCard";
 import { useParams } from "react-router-dom";
+import ConfirmModal from "../components/UtilityComponents/ConfirmModal";
 
 const noQuestionsStyles = css({
   alignSelf: "center",
@@ -22,11 +23,20 @@ const noQuestionsStyles = css({
 
 const UserQuizQuestions = () => {
   const [questions, setQuestions] = useState<QuestionPreviewData[]>([]);
+  const [modalData, setModalData] = useState<{
+    isVisible: boolean;
+    questionId: string;
+  }>({ isVisible: false, questionId: "" });
 
-  const [getQuizes, isLoading] = useHttp(
+  const [getQuizes, isGetLoading] = useHttp(
     `${API_CALL_URL_BASE}/api/routers/http/controllers/question/only_questions`,
     true
   );
+
+  const [deleteQuiz, isDeleteLoading] = useHttp(
+    `${API_CALL_URL_BASE}/api/routers/http/controllers/question/delete_question`
+  );
+
   const { userId, token } = useSelector<ReduxAppState, AuthSliceState>(
     (state) => {
       return state.auth;
@@ -35,11 +45,52 @@ const UserQuizQuestions = () => {
 
   const { quizId } = useParams();
 
-  function afterHttpDeleteSuccessHandler(questionId: string) {
-    setQuestions((prevValue) => {
-      return prevValue.filter((question) => {
-        return question.id !== questionId;
+  function handleDeleteButtonClick(questionId: string) {
+    setModalData({ isVisible: true, questionId: questionId });
+  }
+
+  function handleConfirmButtonClick(
+    event: React.MouseEvent<HTMLButtonElement>
+  ) {
+    handleDeleteQuiz(event);
+    setModalData({ isVisible: false, questionId: "" });
+  }
+
+  function handleCancelButtonClick() {
+    setModalData({ isVisible: false, questionId: "" });
+  }
+
+  const handleDeleteResponse = (response: Response) => {
+    return response.json().then((data) => {
+      if (data.status_code >= 400 && data.status_code <= 599) {
+        throw new Error(data.message);
+      }
+      setQuestions((prevValue) => {
+        return prevValue.filter((question) => {
+          return question.id !== modalData.questionId;
+        });
       });
+    });
+  };
+
+  const handleDeleteError = (error: Error) => {
+    console.warn(error.message);
+  };
+
+  function handleDeleteQuiz(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (token === "" || userId === "") {
+      return;
+    }
+    deleteQuiz(handleDeleteResponse, handleDeleteError, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ user_id: userId, id: modalData.questionId }),
     });
   }
 
@@ -72,55 +123,70 @@ const UserQuizQuestions = () => {
   }, [getQuizes, handleResponse, handleError, token, userId, quizId]);
 
   return (
-    <TwoColumns
-      wrapperContainerCustomCss={css({
-        flexDirection: "column-reverse",
-        [mediaUp("md")]: {
-          flexDirection: "row",
-        },
-      })}
-      asideColumnCustomCss={css({
-        padding: "0.5rem 0.8rem",
-      })}
-      mainColumnCustomCss={css({
-        padding: "0.5rem 0.8rem",
-      })}
-      sideElement={
-        <SideRedirectSectionElement
-          title={"Dodaj pytanie"}
-          redirectionLink={`/add-question/${quizId}`}
-          text="Ten prosty w obsłudze generator, pozwoli ci dodać pytania do twojego quizu! Kliknij w “+” i zaczynaj zabawę!"
-        />
-      }
-    >
-      <ContentContainer isLoading={isLoading} title="Twoje Quizy">
-        {questions.length === 0 && !isLoading && (
-          <h4 css={noQuestionsStyles}>
-            Nie dodałeś jeszcze pytań do tego quizu.
-          </h4>
-        )}
-        {questions.length > 0 &&
-          !isLoading &&
-          questions.map((question) => {
-            return (
-              <UserQuestionsListingCard
-                key={question.id}
-                questionId={question.id}
-                imageUrl={question.link_image}
-                title={question.text}
-                editButtonRedirectionLink={`/edit-question/${quizId}/${question.id}`}
-                onAfterHttpDeleteSuccess={afterHttpDeleteSuccessHandler}
-                customStyles={css({
-                  paddingRight: "3.5rem",
-                  [mediaUp("sm")]: {
-                    paddingRight: "4rem",
-                  },
-                })}
-              />
-            );
-          })}
-      </ContentContainer>
-    </TwoColumns>
+    <>
+      <ConfirmModal
+        isVisible={modalData.isVisible}
+        title="Potwierdź wybór"
+        description="Usunięcie quizu będzie nieodwracalne, a wszystkie pytania w nim zawarte zostaną utracone. Czy na pewno chcesz usunąć?"
+        cancelButtonText="Anuluj"
+        confirmButtonText="Usuń"
+        onConfirm={handleConfirmButtonClick}
+        onCancel={handleCancelButtonClick}
+        onClose={handleCancelButtonClick}
+      />
+      <TwoColumns
+        wrapperContainerCustomCss={css({
+          flexDirection: "column-reverse",
+          [mediaUp("md")]: {
+            flexDirection: "row",
+          },
+        })}
+        asideColumnCustomCss={css({
+          padding: "0.5rem 0.8rem",
+        })}
+        mainColumnCustomCss={css({
+          padding: "0.5rem 0.8rem",
+        })}
+        sideElement={
+          <SideRedirectSectionElement
+            title={"Dodaj pytanie"}
+            redirectionLink={`/add-question/${quizId}`}
+            text="Ten prosty w obsłudze generator, pozwoli ci dodać pytania do twojego quizu! Kliknij w “+” i zaczynaj zabawę!"
+          />
+        }
+      >
+        <ContentContainer isLoading={isGetLoading} title="Twoje Quizy">
+          {questions.length === 0 && !isGetLoading && (
+            <h4 css={noQuestionsStyles}>
+              Nie dodałeś jeszcze pytań do tego quizu.
+            </h4>
+          )}
+          {questions.length > 0 &&
+            !isGetLoading &&
+            questions.map((question) => {
+              return (
+                <UserQuestionsListingCard
+                  questionId={question.id}
+                  key={question.id}
+                  imageUrl={question.link_image}
+                  title={question.text}
+                  editButtonRedirectionLink={`/edit-question/${quizId}/${question.id}`}
+                  isLoading={
+                    isDeleteLoading && question.id === modalData.questionId
+                  }
+                  onDeleteButtonClick={handleDeleteButtonClick}
+                  customStyles={css({
+                    paddingRight: "3.5rem",
+                    [mediaUp("sm")]: {
+                      paddingRight: "4rem",
+                    },
+                  })}
+                />
+              );
+            })}
+        </ContentContainer>
+      </TwoColumns>
+    </>
   );
 };
 

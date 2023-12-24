@@ -3,11 +3,6 @@
 import ListingCard from "../UtilityComponents/ListingCard";
 import { ListingCardProps } from "../../types/UtilityTypes";
 import { css } from "@emotion/react";
-import { API_CALL_URL_BASE } from "../../utils/Constants";
-import useHttp from "../../hooks/useHttp";
-import { useSelector } from "react-redux";
-import { ReduxAppState } from "../../storage/redux";
-import { AuthSliceState } from "../../storage/authSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button } from "@mui/material";
@@ -48,8 +43,9 @@ const actionButtonSharedStyles = {
 type UserQuizesListingCardProps = ListingCardProps & {
   questionId: string;
   editButtonRedirectionLink?: string;
-  onAfterHttpDeleteSuccess?: (quizId: string) => void;
   cardRedirectionLink?: string;
+  isLoading?: boolean;
+  onDeleteButtonClick?: (questionId:string) => void;
 };
 
 const UserQuestionsListingCard = (props: UserQuizesListingCardProps) => {
@@ -60,50 +56,16 @@ const UserQuestionsListingCard = (props: UserQuizesListingCardProps) => {
     customStyles,
     subtitle,
     content,
-    onAfterHttpDeleteSuccess,
     editButtonRedirectionLink,
-    cardRedirectionLink
+    cardRedirectionLink,
+    isLoading,
+    onDeleteButtonClick
   } = props;
 
-  const [deleteQuiz, isLoading] = useHttp(
-    `${API_CALL_URL_BASE}/api/routers/http/controllers/question/delete_question`
-  );
-  const { userId, token } = useSelector<ReduxAppState, AuthSliceState>(
-    (state) => {
-      return state.auth;
+  function handleDeleteButtonClick() {
+    if(onDeleteButtonClick){
+        onDeleteButtonClick(questionId);
     }
-  );
-
-  const handleResponse = (response: Response) => {
-    return response.json().then((data) => {
-      if (data.status_code >= 400 && data.status_code <= 599) {
-        throw new Error(data.message);
-      }
-      if (onAfterHttpDeleteSuccess) {
-        onAfterHttpDeleteSuccess(questionId);
-      }
-    });
-  };
-
-  const handleError = (error: Error) => {
-    console.warn(error.message);
-  };
-
-  function handleDeleteQuiz(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
-    event.stopPropagation();
-    if (token === "" || userId === "") {
-      return;
-    }
-    deleteQuiz(handleResponse, handleError, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ user_id: userId, id: questionId }),
-    });
   }
 
   return (
@@ -115,7 +77,7 @@ const UserQuestionsListingCard = (props: UserQuizesListingCardProps) => {
           variant="contained"
           color="error"
           sx={actionButtonSharedStyles}
-          onClick={handleDeleteQuiz}
+          onClick={handleDeleteButtonClick}
         >
           <DeleteIcon sx={{ width: "90%", height: "90%", color: "white" }} />
         </Button>
