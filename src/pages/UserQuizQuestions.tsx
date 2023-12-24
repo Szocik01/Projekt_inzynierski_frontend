@@ -127,7 +127,7 @@ const UserQuizQuestions = () => {
       <ConfirmModal
         isVisible={modalData.isVisible}
         title="Potwierdź wybór"
-        description="Usunięcie quizu będzie nieodwracalne, a wszystkie pytania w nim zawarte zostaną utracone. Czy na pewno chcesz usunąć?"
+        description="Usunięcie pytania będzie nieodwracalne, a wszystkie treści w nim zawarte zostaną utracone. Czy na pewno chcesz usunąć?"
         cancelButtonText="Anuluj"
         confirmButtonText="Usuń"
         onConfirm={handleConfirmButtonClick}

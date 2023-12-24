@@ -13,6 +13,7 @@ import { QuizPreviewData } from "../types/QuizesTypes";
 import SideRedirectSectionElement from "../components/UtilityComponents/SideRedirectSectionElement";
 import { mediaUp } from "../utils/mediaQueries";
 import UserQuizesListingCard from "../components/UserQuizesComponents/UserQuizesListingCard";
+import ConfirmModal from "../components/UtilityComponents/ConfirmModal";
 
 const noQuizesStyles = css({
   alignSelf: "center",
@@ -21,22 +22,72 @@ const noQuizesStyles = css({
 
 const UserQuizes = () => {
   const [quizes, setQuizes] = useState<QuizPreviewData[]>([]);
+  const [modalData, setModalData] = useState<{
+    isVisible: boolean;
+    quizId: string;
+  }>({ isVisible: false, quizId: "" });
 
   const [getQuizes, isLoading] = useHttp(
     `${API_CALL_URL_BASE}/api/routers/http/controllers/quiz/get_quiz`,
     true
   );
+
+  const [deleteQuiz, isDeleteLoading] = useHttp(
+    `${API_CALL_URL_BASE}/api/routers/http/controllers/quiz/delete_quiz`
+  );
+
   const { userId, token } = useSelector<ReduxAppState, AuthSliceState>(
     (state) => {
       return state.auth;
     }
   );
 
-  function afterHttpDeleteSuccessHandler(quizId: string) {
-    setQuizes((prevValue) => {
-      return prevValue.filter((quiz) => {
-        return quiz.id !== quizId;
+  function handleDeleteButtonClick(quizId: string) {
+    setModalData({ isVisible: true, quizId: quizId });
+  }
+
+  function handleConfirmButtonClick(
+    event: React.MouseEvent<HTMLButtonElement>
+  ) {
+    handleDeleteQuiz(event);
+    setModalData({ isVisible: false, quizId: "" });
+  }
+
+  function handleCancelButtonClick() {
+    setModalData({ isVisible: false, quizId: "" });
+  }
+
+  const handleDeleteResponse = (response: Response) => {
+    return response.json().then((data) => {
+      if (data.status_code >= 400 && data.status_code <= 599) {
+        throw new Error(data.message);
+      }
+      setQuizes((prevValue) => {
+        return prevValue.filter((quiz) => {
+          return quiz.id !== modalData.quizId;
+        });
       });
+    });
+  };
+
+  const handleDeleteError = (error: Error) => {
+    console.warn(error.message);
+  };
+
+  function handleDeleteQuiz(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (token === "" || userId === "") {
+      return;
+    }
+    deleteQuiz(handleDeleteResponse, handleDeleteError, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ user_id: userId, id: modalData.quizId }),
     });
   }
 
@@ -69,6 +120,17 @@ const UserQuizes = () => {
   }, [getQuizes, handleResponse, handleError, token, userId]);
 
   return (
+    <>
+    <ConfirmModal
+      isVisible={modalData.isVisible}
+      title="Potwierdź wybór"
+      description="Usunięcie quizu będzie nieodwracalne, a wszystkie pytania w nim zawarte zostaną utracone. Czy na pewno chcesz usunąć?"
+      cancelButtonText="Anuluj"
+      confirmButtonText="Usuń"
+      onConfirm={handleConfirmButtonClick}
+      onCancel={handleCancelButtonClick}
+      onClose={handleCancelButtonClick}
+    />
     <TwoColumns
       wrapperContainerCustomCss={css({
         flexDirection: "column-reverse",
@@ -107,7 +169,8 @@ const UserQuizes = () => {
                 content={quiz.description}
                 editButtonRedirectionLink={`/edit-quiz/${quiz.id}`}
                 cardRedirectionLink={`/user-questions/${quiz.id}`}
-                onAfterHttpDeleteSuccess={afterHttpDeleteSuccessHandler}
+                onDeleteButtonClick={handleDeleteButtonClick}
+                isLoading={isDeleteLoading && quiz.id === modalData.quizId}
                 customStyles={css({
                   paddingRight: "3.5rem",
                   [mediaUp("sm")]: {
@@ -119,6 +182,7 @@ const UserQuizes = () => {
           })}
       </ContentContainer>
     </TwoColumns>
+    </>
   );
 };
 
