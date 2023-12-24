@@ -6,33 +6,37 @@ import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import React, { FC } from "react";
 import { css } from "@emotion/react";
+import { mediaUp } from "../../utils/mediaQueries";
 
 const modalStyles = css({
+  width:"calc(100% - 2.6rem)",
+  margin:"0 auto",
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "100%",
-  maxWidth: "500px",
-  boxShadow: "24",
   padding: "1.5rem",
-    borderRadius: "5px",
-    backgroundColor: "white",
+  borderRadius: "5px",
+  backgroundColor: "white",
+  [mediaUp('sm')]:{
+    maxWidth: "500px",
+    width: "100%",
+  }
 });
 
 const titleStyles = css({
-    borderBottom: "2px solid gray",
-    marginBottom: "1rem",
+  borderBottom: "2px solid gray",
+  marginBottom: "1rem",
 });
 
 const descriptionStyles = css({
-    marginBottom: "1.5rem",
+  marginBottom: "1.5rem",
 });
 
 const buttonContainerStyles = css({
-    display: "flex",
-    flexDirection: "row",
-    gap:"1rem",
+  display: "flex",
+  flexDirection: "row",
+  gap: "1rem",
 });
 
 type ConfirmModalProps = {
@@ -75,13 +79,19 @@ const ConfirmModal: FC<ConfirmModalProps> = (props) => {
       >
         <Fade in={isVisible}>
           <div css={modalStyles}>
-            <h4 id="modal-title" css={titleStyles}>{title}</h4>
+            <h4 id="modal-title" css={titleStyles}>
+              {title}
+            </h4>
             <div id="modal-description" css={descriptionStyles}>
               {description}
             </div>
             <div css={buttonContainerStyles}>
-              <Button variant="contained" color="success" onClick={onConfirm}>{confirmButtonText}</Button>
-              <Button variant="contained" color="error" onClick={onCancel}>{cancelButtonText}</Button>
+              <Button variant="contained" color="success" onClick={onConfirm}>
+                {confirmButtonText}
+              </Button>
+              <Button variant="contained" color="error" onClick={onCancel}>
+                {cancelButtonText}
+              </Button>
             </div>
           </div>
         </Fade>
