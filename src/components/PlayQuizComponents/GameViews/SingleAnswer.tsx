@@ -63,7 +63,7 @@ const answerDataContainerStyles = css({
 
 const answerImageStyles = css({
   width: "100%",
-  maxWidth: "45rem",
+  maxWidth: "35rem",
   borderRadius: "10px",
   objectFit: "cover",
   objectPosition: "center",
