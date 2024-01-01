@@ -44,11 +44,8 @@ const errorInfoStyles = css({
 
 const imagePreviewStyles = css({
   width: "100%",
-  height: "100%",
-  objectFit: "cover",
   objectPosition: "center",
   borderRadius: "15px",
-  aspectRatio: "2/1",
 });
 
 type PhotoUploadProps = {
