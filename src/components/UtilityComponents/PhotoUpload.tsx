@@ -12,7 +12,6 @@ const dropZoneContainerStyles = css({
   alignItems: "center",
   flexDirection: "column",
   position: "relative",
-  borderRadius: "15px",
   overflow: "hidden",
 });
 
