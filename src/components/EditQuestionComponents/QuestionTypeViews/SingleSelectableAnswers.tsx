@@ -146,6 +146,9 @@ const SingleSelectableAnswers: FC<EditAnswersViewProps> = (props) => {
       return newState;
     });
     const file = files[0];
+    if(!file){
+      return;
+    }
     const validationResult = fileValidationHandler(file);
     if (validationResult !== "") {
       setFileErrors((prevState) => {
@@ -183,6 +186,9 @@ const SingleSelectableAnswers: FC<EditAnswersViewProps> = (props) => {
       return newState;
     });
     const file = files[0];
+    if(!file){
+      return;
+    }
     const validationResult = fileValidationHandler(file);
     if (validationResult !== "") {
       setFileErrors((prevState) => {
@@ -327,20 +333,11 @@ const SingleSelectableAnswers: FC<EditAnswersViewProps> = (props) => {
         index: answer.id,
         text: answer.text,
         answer_type: +answer.answerType,
-        delete_image: answer.linkImage === "" ? 1 : 0,
+        delete_image: answer.linkImage === "" && !answer.file ? 1 : 0,
       }
     });
     formData.append("array_answers", JSON.stringify(mappedNewAnswerData));
     formData.append("array_answers_edit", JSON.stringify(mappedOldAnswerData));
-    console.log(formData.get("array_answers"));
-    console.log(formData.get("array_answers_edit"));
-    console.log(formData.get("delete_answers[]"));
-    console.log(formData.get("image"));
-    console.log(formData.get("array_images[]"));
-    console.log(formData.get("question_id"));
-    console.log(formData.get("quiz_id"));
-    console.log(formData.get("type_id"));
-    console.log(formData.get("user_id"));
 
     submitRequestFunction(handleResponse, handleError, {
       method: "POST",
