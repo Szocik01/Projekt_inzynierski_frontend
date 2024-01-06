@@ -138,7 +138,7 @@ const EndingPage: FC<EndingPageProps> = (props) => {
         <div css={circularDataContainer}>
           <div css={middleCircularDataContainer}>
             <div css={circularDataDisplay}>
-              <span>{+(score / totalQuestions).toFixed(2) * 100}</span>%
+              <span>{parseInt(((score / totalQuestions) * 100).toString())}</span>%
             </div>
           </div>
         </div>
