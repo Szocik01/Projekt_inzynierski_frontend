@@ -118,6 +118,7 @@ const SingleAnswer: FC<QuestionPageProps> = (props) => {
 
   function redirectToNextQuestionHandler() {
     setQuestionSaved(false);
+    setSelectedAnswerId("");
     onChangeQuestion();
   }
 

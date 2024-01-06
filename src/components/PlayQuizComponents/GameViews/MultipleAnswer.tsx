@@ -103,6 +103,9 @@ const MultipleAnswer: FC<QuestionPageProps> = (props) => {
   );
 
   function saveQuestionHandler() {
+    if(selectedAnswerIdArray.length === 0) {
+      return;
+    }
     const correctAnswersIdArray = answers.filter((answer) => {
       return answer.answer_type === true;
     });
@@ -115,9 +118,6 @@ const MultipleAnswer: FC<QuestionPageProps> = (props) => {
         trueAnswerIdArray.push(selectedAnswer[0].id);
       }
     });
-    if (selectedAnswerIdArray.length === 0) {
-      return;
-    }
 
     const answerType =
       trueAnswerIdArray.length === correctAnswersIdArray.length &&
@@ -129,6 +129,7 @@ const MultipleAnswer: FC<QuestionPageProps> = (props) => {
 
   function redirectToNextQuestionHandler() {
     setQuestionSaved(false);
+    setSelectedAnswerIdArray([]);
     onChangeQuestion();
   }
 
