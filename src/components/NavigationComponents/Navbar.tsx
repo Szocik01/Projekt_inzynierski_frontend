@@ -163,11 +163,12 @@ const navbarSideRightStyles = css({
     alignItems: "center",
     justifyContent: "flex-end",
     gap: "1.5rem",
-    a: {
-      color: "#00F800",
-    },
   },
 });
+
+const loginButtonStyles = css({
+  color: "#00F800 !important",
+})
 
 type NavbarProps = {
   isUnfolded: boolean;
@@ -229,7 +230,7 @@ const Navbar: FC<NavbarProps> = (props) => {
       <div css={navbarSideRightStyles}>
         {!token || !userId ? (
           <>
-            <Link to="/login">Zaloguj się</Link>
+            <Link to="/login" css={[loginButtonStyles]}>Zaloguj się</Link>
             <Link to="/register">
               <Button
                 sx={[
