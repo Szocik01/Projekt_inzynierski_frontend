@@ -14,4 +14,4 @@ export type SendRequestFunction = (
   handleError?: (error: Error) => void,
   requestOptions?: RequestInit | undefined,
   urlParameters?: string
-) => void;
+) => Promise<void>;

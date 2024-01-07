@@ -42,7 +42,7 @@ const PlayQuiz = () => {
     true
   );
 
-  const { token } = useSelector<ReduxAppState, AuthSliceState>(
+  const { token, userId } = useSelector<ReduxAppState, AuthSliceState>(
     (state) => {
       return state.auth;
     }
@@ -92,28 +92,29 @@ const PlayQuiz = () => {
   }, []);
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
     getQuiz(handleResponse, handleError, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         quiz_id: quizId,
       }),
     });
-  }, [token, getQuiz, handleResponse, handleError, quizId]);
+  }, [getQuiz, handleResponse, handleError, quizId]);
 
   let viewToRender = null;
 
-  if(questions.length === 0){
-    viewToRender = <p css={{width:"100%", textAlign:"center"}}>Brak pytań w quizie</p>
-  }
-  else if (!isSolvingQuiz && activeQuestion === 0 && userAnswersArrayRef.current.length === 0) {
+  if (questions.length === 0) {
+    viewToRender = (
+      <p css={{ width: "100%", textAlign: "center" }}>Brak pytań w quizie</p>
+    );
+  } else if (
+    !isSolvingQuiz &&
+    activeQuestion === 0 &&
+    userAnswersArrayRef.current.length === 0
+  ) {
     viewToRender = (
       <InvitationPage
         onBeginQuiz={() => setSolvingQuiz(true)}
@@ -125,9 +126,12 @@ const PlayQuiz = () => {
   } else if (!isSolvingQuiz && activeQuestion === questions.length - 1) {
     viewToRender = (
       <EndingPage
+        token={token}
+        userId={userId}
         score={calculateScore()}
         totalQuestions={questions.length}
         quizName={quizData.name}
+        quizId={quizData.id}
       />
     );
   } else if (questions[activeQuestion].type.type === "single") {
