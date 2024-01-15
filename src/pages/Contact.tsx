@@ -36,20 +36,19 @@ const Contact = () => {
         <ContactCard
           name="Artur Ścibor"
           functionInProject="Backend Developer"
-          githubUrl="a"
-          facebookUrl="a"
-          linkedinUrl="a"
-          email="a"
-          portfolioUrl="a"
+          githubUrl="https://github.com/1ChaLLengeR1"
+          facebookUrl="https://www.facebook.com/profile.php?id=100008634312630"
+          linkedinUrl="https://www.linkedin.com/in/artur-%C5%9Bcibor-9799ba276/"
+          email="artek.scibor@gmail.com"
+          portfolioUrl="https://arturscibor.pl/"
         />
          <ContactCard
           name="Filip Wojtyła"
           functionInProject="Manual Tester"
-          githubUrl="a"
-          facebookUrl="a"
-          linkedinUrl="a"
-          email="a"
-          portfolioUrl="a"
+          githubUrl="https://github.com/t3rrificc"
+          facebookUrl="https://www.facebook.com/filip.wojtyla.3"
+          linkedinUrl="https://www.linkedin.com/in/filip-wojty%C5%82a-ba763626a?trk=contact-info"
+          email="filip.wojtyla@student.up.krakow.pl"
         />
       </ContentContainer>
     </SingleColumn>

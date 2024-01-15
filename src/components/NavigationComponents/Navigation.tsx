@@ -14,6 +14,7 @@ import { AuthSliceState, authSliceActions } from "../../storage/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ContentLoading from "../UtilityComponents/ContentLoading";
 import { PageEventsSliceState } from "../../storage/pageEventsSlice";
+import { useNavigate } from "react-router-dom";
 
 const headerStyles = css({
   position: "fixed",
@@ -26,6 +27,7 @@ const headerStyles = css({
 
 const Navigation = () => {
   const [isUnfolded, setUnfolded] = useState(false);
+  const navigate = useNavigate();
 
   const [logoutRequest, isLoggingOut] = useHttp(
     `${API_CALL_URL_BASE}/api/routers/http/controllers/auth/logout`
@@ -56,6 +58,7 @@ const Navigation = () => {
       if (data.status_code >= 400 && data.status_code <= 599) {
         throw new Error(data.message);
       }
+      navigate("/");
     });
   }
 

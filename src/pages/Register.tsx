@@ -17,7 +17,7 @@ import {
   headerStyles,
   descriptionPanelStyles,
   httpErrorStyles,
-  redirectionSectionStyles
+  redirectionSectionStyles,
 } from "../components/AuthComponents/AuthGlobalStyles";
 import { baseButtonStyles } from "../GlobalStyles";
 import { Link } from "react-router-dom";
@@ -74,7 +74,7 @@ const Register = () => {
     if (userName.trim().length < 6) {
       return "Hasło powinno zawierać przynajmniej 8 znaków.";
     }
-    if(userName.trim().length > 12){
+    if (userName.trim().length > 12) {
       return "Hasło powinno zawierać maksymalnie 12 znaków.";
     }
     return "";
@@ -142,10 +142,12 @@ const Register = () => {
     <SingleColumn customCss={customSingleColumnStyles}>
       <div css={authPanelStyles}>
         <form css={formStyles} onSubmit={registerHandler}>
-        {isLoading && <ContentLoading coverParent={true} blurOverlay={true}/>}
-        <h1 css={headerStyles}>
+          {isLoading && (
+            <ContentLoading coverParent={true} blurOverlay={true} />
+          )}
+          <h1 css={headerStyles}>
             {resolveLastWordColor("Zarejestruj się na Konto")}
-        </h1>
+          </h1>
           <AuthFormInputs
             values={registerData}
             valueErrors={{
@@ -176,29 +178,25 @@ const Register = () => {
               !!userNameError
             }
             type="submit"
-            sx={[baseButtonStyles,{textTransform:"uppercase"}]}
+            sx={[baseButtonStyles, { textTransform: "uppercase" }]}
           >
             Zarejestruj
           </Button>
           <span css={redirectionSectionStyles}>
-            Posiadasz już konto?{" "}
-            <Link to="/login">Zaloguj się</Link>
+            Posiadasz już konto? <Link to="/login">Zaloguj się</Link>
           </span>
         </form>
         <div css={descriptionPanelStyles}>
-          <h2>
-            Witaj Quizowiczu!
-          </h2>
+          <h2>Witaj Quizowiczu!</h2>
           <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s , when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
+            Witamy na najlepszej stronie z quizami! Zarejestruj się już dziś i
+            ciesz się rozwiązywaniem quizów z wielu różnych dziedzin! Sprawdź
+            swoją wiedzę i pokaż wszystkim na co Cię stać! Posiadasz już konto?
+            To świetnie! <Link to="/login">Zaloguj się</Link> już teraz i dołącz
+            do grona najlepszych graczy! Zalogowani użytkownicy mogą tworzyć
+            własne quizy i dzielić się nimi ze znajomymi oraz zapisywać swój
+            wynik w rankingach! Nie czekaj, dołącz do naszej społeczności Quiz
+            Maniaków już dziś!
           </p>
         </div>
       </div>

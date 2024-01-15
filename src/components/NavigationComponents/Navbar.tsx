@@ -197,7 +197,7 @@ const Navbar: FC<NavbarProps> = (props) => {
           (isUnfolded || isScrolled) && navbarSideLeftUnfoldedStyles,
         ]}
       >
-        {resolveLastWordColor("Nazwa Strony")}
+        {resolveLastWordColor("Quiz Mania")}
       </div>
       <div css={[navbarCenterStyles, (isScrolled || isUnfolded) && navbarCenterActiveStyles]}>
         <NavLink

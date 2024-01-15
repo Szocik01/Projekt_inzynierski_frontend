@@ -6,6 +6,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LanguageIcon from "@mui/icons-material/Language";
+import { mediaUp } from "../../utils/mediaQueries";
 
 const contactCardContainerStyles = css({
   display: "flex",
@@ -15,8 +16,8 @@ const contactCardContainerStyles = css({
   borderRadius: "10px",
   boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.20);",
   padding: "1rem",
-  flexGrow: 1,
   backgroundColor: "#fff",
+  width: "100%",
 
   span: {
     width: "100%",
@@ -38,6 +39,9 @@ const contactCardContainerStyles = css({
     "&:hover": {
       color: "#00dd00",
     },
+  },
+  [mediaUp("md")]: {
+    width: "33.3%",
   },
 });
 

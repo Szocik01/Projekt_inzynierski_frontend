@@ -75,14 +75,11 @@ const App = () => {
       token: "",
       userId: "",
     };
+    let isRememberMe = false;
     for (const cookie of cookiesArray) {
       const splittedCookie = cookie.split("=");
-      if (
-        splittedCookie[0].trim() === "rememberMe" &&
-        +splittedCookie[1].trim() !== 1
-      ) {
-        setLoading(false);
-        return;
+      if (splittedCookie[0].trim() === "rememberMe") {
+        isRememberMe = +splittedCookie[1].trim() === 1;
       }
       if (splittedCookie[0].trim() === "token") {
         authData.token = splittedCookie[1].trim();
@@ -92,6 +89,16 @@ const App = () => {
       }
     }
     if (!authData.token || !authData.userId) {
+      setLoading(false);
+      return;
+    }
+    if (!isRememberMe) {
+      dispatch(
+        authSliceActions.addUserData({
+          token: authData.token,
+          userId: authData.userId,
+        })
+      );
       setLoading(false);
       return;
     }
@@ -149,16 +156,24 @@ const App = () => {
         <Route path="/" element={<Main />} />
         <Route path="/contact" element={<Contact />} />
         {token && userId && <Route path="/add-quiz" element={<AddQuiz />} />}
-        {token && userId && <Route path="/edit-quiz/:quizId" element={<EditQuiz />} />}
-        {token && userId && <Route path="/user-quizes" element={<UserQuizes />} />}
+        {token && userId && (
+          <Route path="/edit-quiz/:quizId" element={<EditQuiz />} />
+        )}
+        {token && userId && (
+          <Route path="/user-quizes" element={<UserQuizes />} />
+        )}
         <Route path="/quizes" element={<Quizes />} />
-        {token && userId && <Route path="/add-question/:quizId" element={<AddQuestion />} />}
-        <Route path="/play-quiz/:quizId" element={<PlayQuiz/>} />
-        {token && userId && <Route
-          path="/edit-question/:quizId/:questionId"
-          element={<EditQuestion />}
-        />}
-        <Route path="/user-questions/:quizId" element={<UserQuizQuestions/>}/>
+        {token && userId && (
+          <Route path="/add-question/:quizId" element={<AddQuestion />} />
+        )}
+        <Route path="/play-quiz/:quizId" element={<PlayQuiz />} />
+        {token && userId && (
+          <Route
+            path="/edit-question/:quizId/:questionId"
+            element={<EditQuestion />}
+          />
+        )}
+        <Route path="/user-questions/:quizId" element={<UserQuizQuestions />} />
         {token && userId ? (
           <Route
             path="/register"

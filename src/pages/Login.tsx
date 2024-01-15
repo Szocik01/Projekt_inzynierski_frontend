@@ -17,7 +17,7 @@ import {
   headerStyles,
   descriptionPanelStyles,
   httpErrorStyles,
-  redirectionSectionStyles
+  redirectionSectionStyles,
 } from "../components/AuthComponents/AuthGlobalStyles";
 import { baseButtonStyles } from "../GlobalStyles";
 import { Link } from "react-router-dom";
@@ -149,27 +149,26 @@ const Login = () => {
             variant="contained"
             disabled={!!emailError || !!passwordError}
             type="submit"
-            sx={[baseButtonStyles,{textTransform:"uppercase"}]}
+            sx={[baseButtonStyles, { textTransform: "uppercase" }]}
           >
             Zaloguj
           </Button>
           <span css={redirectionSectionStyles}>
-            Nie posiadasz jeszcze konta?{" "}
+            Nie posiadasz jeszcze konta?
             <Link to="/register">Zarejestruj się</Link>
           </span>
         </form>
         <div css={descriptionPanelStyles}>
           <h2>Witaj Quizowiczu!</h2>
           <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s , when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
+            Witamy na najlepszej stronie z quizami! Zaloguj się na swoje konto i
+            już dziś ciesz się rozwiązywaniem quizów z wielu różnych dziedzin!
+            Sprawdź swoją wiedzę i pokaż wszystkim na co Cię stać! Nie posiadasz
+            jeszcze konta? Nic nie szkodzi!
+            <Link to="/register">Zarejestruj się</Link> już dziś i dołącz do
+            grona najlepszych graczy! Zarejestrowani użytkownicy mogą również
+            tworzyć własne quizy i dzielić się nimi ze znajomymi! Nie czekaj,
+            dołącz do naszej społeczności Quiz Maniaków już dziś!
           </p>
         </div>
       </div>

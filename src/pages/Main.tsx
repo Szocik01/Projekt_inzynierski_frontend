@@ -61,12 +61,12 @@ const cardsDataArray: {
   {
     imageUrl: "/images/mainCardsImages/world-image.svg",
     title: "Quizy z całego Świata!",
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.`,
+    description: `Na Quiz Manii znajdziesz quizy z wielu różnych dziedzin, które oraz wielu zakątków świata! Znajdziesz tu quizy z geografii, historii, sportu, muzyki, filmu i wielu innych! Sprawdź swoją wiedzę o świecie i pokaż że nie masz sobie równych!`,
   },
   {
     imageUrl: "/images/mainCardsImages/template-image.svg",
     title: "Prosty Szablon Quizów!",
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.`,
+    description: `Rozwiązywanie quizów nigdy nie było prostsze. Zaznaczasz odpowiedź, zapisujesz ją i od razu widzisz czy odpowiedziałeś poprawnie. Na koniec quizu porównaj swoje wyniki ze znajomymi, dzięki szczegółowemu podsumowaniu i rankingowi najlepszych graczy!`,
     customCss: css({
       background: "#55B974",
       position: "relative",
@@ -78,7 +78,7 @@ const cardsDataArray: {
   {
     imageUrl: "/images/mainCardsImages/score-image.svg",
     title: "Stań się Najlepszy!",
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.`,
+    description: `Może chcesz spwdzić swoją wiedzę z użytkownikami z różnych stron świata? Nic prostszego! Rozwiąż quiz, a następnie sprawdź poprawność swoich odpowiedzi i swoją pozycję w rankingu podsumowującym quiz! Pokaż wszystkim na co cię stać!`,
   },
 ];
 
@@ -90,10 +90,9 @@ const Main = () => {
       </h1>
       <div css={descriptionContainerStyles}>
         <span css={descriptionStyles}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
+          Witamy Cię na stronie, gdzie żadne pytanie nie pozostanie bez odpowiedzi!
+          Spróbuj swoich sił w quizach z różnych dziedzin i stań się najlepszy wśród wszystkich graczy
+          lub stwórz własny quiz i daj się wykazać innym. Decyzja należy tylko do Ciebie!
         </span>
       </div>
       <Link to="/quizes" css={{ margin: "0 auto" }}>
